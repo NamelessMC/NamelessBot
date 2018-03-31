@@ -3,6 +3,7 @@ package com.namelessmc.discord;
 import com.namelessmc.discord.cmds.byeCmd;
 import com.namelessmc.discord.cmds.helpCmd;
 import com.namelessmc.discord.cmds.supportCmd;
+import com.namelessmc.discord.events.joinLeaveEvent;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -15,7 +16,10 @@ import java.util.Properties;
 public class Bot {
     private static String BOT_TOKEN;
     public static String BOT_PREFIX = ">";
+    public static String WELCOME_MESSAGE_CHANNEL = "welcome";
     public static Color EMBED_COLOR = new Color(0x0275D8);
+    public static Color EMBED_COLOR_GREEN = new Color(0x03D63E);
+    public static Color EMBED_COLOR_RED = new Color(0xD60334);
     public static String[] ADMIN_USER_IDS = {"209769851651227648"};
     public static String[] ALLOWED_CHANNEL_PREFIXES = {"bot-", "nameless", "support", "test"};
 
@@ -47,7 +51,7 @@ public class Bot {
             System.out.print("Bot > Starting bot...\n");
             jda = new JDABuilder(AccountType.BOT).setToken(BOT_TOKEN)
                     .setGame(Game.playing(BOT_PREFIX + "help | namelessmc.com"))
-                    .addEventListener(new helpCmd(), new byeCmd(), new supportCmd())
+                    .addEventListener(new joinLeaveEvent(), new helpCmd(), new byeCmd(), new supportCmd())
                     .buildAsync();
         }
     }
