@@ -4,6 +4,7 @@ import com.namelessmc.discord.Bot;
 import com.namelessmc.discord.functions.canTalkCustom;
 import com.namelessmc.discord.functions.fetchJson;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.json.JSONArray;
@@ -50,11 +51,19 @@ public class supportCmd extends ListenerAdapter {
                                 description = description + stringLine.replace("\\n", System.lineSeparator());
                             }
                             embedBuilder = new EmbedBuilder().setTitle("Support: " + supportJson.getString("title")).setColor(Bot.EMBED_COLOR)
-                                    .setDescription(description);
+                                    .setDescription(description).setFooter("Requested by " + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator(), null);
                         }
                     }
                 }
                 event.getChannel().sendMessage(embedBuilder.build()).queue();
+                if (event.getMessage().getContentRaw().contains(" ")) {
+                    String[] splitMessage = event.getMessage().getContentRaw().split(" ");
+                    if (Arrays.asList(splitMessage).get(Arrays.asList(splitMessage).size() - 1) == "-hide") {
+                        if (event.getMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_MANAGE)) {
+                            event.getMessage().delete().queue();
+                        }
+                    }
+                }
             }
         }
     }

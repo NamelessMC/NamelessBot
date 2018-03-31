@@ -16,10 +16,11 @@ public class helpCmd extends ListenerAdapter {
             if (canTalkCustom.canTalk(event.getTextChannel())) {
                 EmbedBuilder embedBuilder = new EmbedBuilder().setTitle("Help (Prefix is " + Bot.BOT_PREFIX + ")").setColor(Bot.EMBED_COLOR)
                         .setDescription(
-                                "**help**: Display this message\n" +
-                                "**support**: Get quick support on common issues\n" +
-                                "**bye**: Shut down the bot. *Admins Only*"
-                        );
+                                "**help**: Display this message.\n" +
+                                "**support [optional: parameter]**: Get quick support on common issues.\\*\n" +
+                                "**bye**: Shut down the bot. *Admins Only*\n" +
+                                "\\**Add a parameter ``-hide`` to the end to auto-delete your message*"
+                        ).setFooter("Requested by " + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator(), null);
                 event.getChannel().sendMessage(embedBuilder.build()).queue();
             }
         }

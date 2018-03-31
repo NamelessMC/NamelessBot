@@ -19,7 +19,8 @@ public class byeCmd extends ListenerAdapter {
             if (event.getMessage().getContentRaw().startsWith(Bot.BOT_PREFIX + "bye")) {
                 if (canTalkCustom.canTalk(event.getTextChannel())) {
                     EmbedBuilder embedBuilder = new EmbedBuilder().setTitle("Bye").setColor(Bot.EMBED_COLOR)
-                            .setDescription("The bot is shutting down! Panic!");
+                            .setDescription("The bot is shutting down! Panic!")
+                            .setFooter("Requested by " + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator(), null);
                     event.getChannel().sendMessage(embedBuilder.build()).queue();
                     try {
                         TimeUnit.SECONDS.sleep(1);
