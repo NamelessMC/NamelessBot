@@ -13,9 +13,11 @@ Don't do the following:
 public boolean thisReturnsTrue()
 {
     return true;
-}```
+}
+```
 We want to see the following format:
 ```
 public boolean thisReturnsTrue() {
     return true;
-}```
+}
+```
