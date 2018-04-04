@@ -3,6 +3,7 @@ package com.namelessmc.discord.functions;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -15,7 +16,12 @@ public class fetchJson {
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
             con.setRequestMethod("GET");
             con.setRequestProperty("User-Agent", "Mozilla/5.0");
-            int responseCode = con.getResponseCode();
+            int responseCode;
+            try {
+                responseCode = con.getResponseCode();
+            } catch (Exception e) {
+                responseCode = 404;
+            }
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String inputLine;
             StringBuffer response = new StringBuffer();
@@ -24,7 +30,7 @@ public class fetchJson {
             }
             in.close();
             //Read JSON response
-            if (!(responseCode == 200 | responseCode == 201)) {
+            if (responseCode == 404) {
                 jsonResponse = new JSONObject().put("responseCode", responseCode);
             } else {
                 jsonResponse = new JSONObject(response.toString()).put("responseCode", responseCode);
