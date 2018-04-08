@@ -20,8 +20,9 @@ public class helpCmd extends ListenerAdapter {
                         .setDescription(
                                 "**help**: Display this message.\n" +
                                 "**support [optional: parameter]**: Get quick support on common issues.\\*\n" +
+                                "**eval [optional: code]**: Evaluate some code. *Admins Only*\n" +
                                 "**bye**: Shut down the bot. *Admins Only*\n" +
-                                "\\**Add a parameter ``-hide`` to the end to auto-delete your message*"
+                                "\\**Add a parameter ``-hide`` or ``//hide`` to the end to auto-delete your message*"
                         ).setFooter(footerText, null);
                 event.getChannel().sendMessage(embedBuilder.build()).queue();
                 messageAddons.hideMessage(event);

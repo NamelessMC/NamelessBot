@@ -1,5 +1,6 @@
 package com.namelessmc.discord.functions;
 
+import com.namelessmc.discord.Bot;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
@@ -10,7 +11,12 @@ public class messageAddons {
         if (event.getMessage().getContentRaw().contains(" ")) {
             String[] splitMessage = event.getMessage().getContentRaw().split(" ");
             if (Arrays.asList(splitMessage).get(Arrays.asList(splitMessage).size() - 1).equalsIgnoreCase("-hide")) {
-                if (event.getMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_MANAGE)) {
+                if (event.getGuild().getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_MANAGE)) {
+                    return true;
+                }
+            }
+            if (Arrays.asList(splitMessage).get(Arrays.asList(splitMessage).size() - 1).equalsIgnoreCase("//hide")) {
+                if (event.getGuild().getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_MANAGE)) {
                     return true;
                 }
             }
@@ -22,7 +28,12 @@ public class messageAddons {
         if (event.getMessage().getContentRaw().contains(" ")) {
             String[] splitMessage = event.getMessage().getContentRaw().split(" ");
             if (Arrays.asList(splitMessage).get(Arrays.asList(splitMessage).size() - 1).equalsIgnoreCase("-hide")) {
-                if (event.getMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_MANAGE)) {
+                if (event.getGuild().getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_MANAGE)) {
+                    event.getMessage().delete().queue();
+                }
+            }
+            if (Arrays.asList(splitMessage).get(Arrays.asList(splitMessage).size() - 1).equalsIgnoreCase("//hide")) {
+                if (event.getGuild().getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_MANAGE)) {
                     event.getMessage().delete().queue();
                 }
             }
@@ -33,11 +44,35 @@ public class messageAddons {
         if (event.getMessage().getContentRaw().contains(" ")) {
             String[] splitMessage = event.getMessage().getContentRaw().split(" ");
             if (Arrays.asList(splitMessage).get(Arrays.asList(splitMessage).size() - 1).equalsIgnoreCase("-hide")) {
-                if (event.getMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_MANAGE)) {
+                if (event.getGuild().getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_MANAGE)) {
+                    return "Requested by " + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator() + " with auto-hide.";
+                }
+            }
+            if (Arrays.asList(splitMessage).get(Arrays.asList(splitMessage).size() - 1).equalsIgnoreCase("//hide")) {
+                if (event.getGuild().getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_MANAGE)) {
                     return "Requested by " + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator() + " with auto-hide.";
                 }
             }
         }
         return "Requested by " + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator();
+    }
+
+    public static String sanitizeMessage(String string, Boolean forCodeBlock) {
+        if (forCodeBlock) {
+            String finalString = string;
+            finalString = finalString.replace(Bot.jda.getToken(), "<Token Removed>");
+            finalString = finalString.replace("`", "\\`");
+            finalString = finalString.replace("@everyone", "<Everyone Mention>");
+            return finalString;
+        } else {
+            String finalString = string;
+            finalString = finalString.replace(Bot.jda.getToken(), "<Token Removed>");
+            finalString = finalString.replace("~", "\\~");
+            finalString = finalString.replace("`", "\\`");
+            finalString = finalString.replace("*", "\\*");
+            finalString = finalString.replace("_", "\\_");
+            finalString = finalString.replace("@everyone", "<Everyone Mention>");
+            return finalString;
+        }
     }
 }
