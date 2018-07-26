@@ -32,7 +32,7 @@ public class Bot {
     // Users allowed to use the eval, bye, etc. commands
     public static String[] ADMIN_USER_IDS = {"209769851651227648"};
     // Channels that the bot is allowed to accept commands in
-    public static String[] ALLOWED_CHANNEL_PREFIXES = {"a", "d", "logs", "bot-", "test-", "nameless", "support", "off-topic"};
+    public static String[] ALLOWED_CHANNEL_PREFIXES = {"a", "d", "s", "logs", "bot-", "test-", "nameless", "support", "off-topic"};
     // Channels the bot watches over :eyes:
     public static String[] WATCH_CHANNELS = {"d", "nameless", "support", "off-topic", "adverts", "giveaway", "v2-plugin"};
 
