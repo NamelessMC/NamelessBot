@@ -18,15 +18,22 @@ import java.util.Properties;
 
 public class Bot {
     private static String BOT_TOKEN;
+    // Command prefix
     public static String BOT_PREFIX = ">";
+    // Welcome message channel
     public static String WELCOME_MESSAGE_CHANNEL = "welcome";
+    // Log channel
     public static String LOGS_MESSAGE_CHANNEL = "logs";
+    // Colors used throughout the bot
     public static Color EMBED_COLOR = new Color(0x0275D8);
     public static Color EMBED_COLOR_GREEN = new Color(0x03D63E);
     public static Color EMBED_COLOR_RED = new Color(0xD60334);
+    // Users allowed to use the eval, bye, etc. commands
     public static String[] ADMIN_USER_IDS = {"209769851651227648"};
-    public static String[] ALLOWED_CHANNEL_PREFIXES = {"a", "d", "l", "bot-", "nameless", "support", "test"};
-    public static String[] WATCH_CHANNELS = {"nameless", "support", "development", "offtopic", "adverts", "giveaway", "v2-plugin"};
+    // Channels that the bot is allowed to accept commands in
+    public static String[] ALLOWED_CHANNEL_PREFIXES = {"a", "d", "logs", "bot-", "test-", "nameless", "support", "off-topic"};
+    // Channels the bot watches over :eyes:
+    public static String[] WATCH_CHANNELS = {"d", "nameless", "support", "off-topic", "adverts", "giveaway", "v2-plugin"};
 
     public static JDA jda;
 
