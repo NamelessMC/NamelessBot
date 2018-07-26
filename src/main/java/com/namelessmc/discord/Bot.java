@@ -63,7 +63,7 @@ public class Bot {
             System.out.print("Bot > Starting bot...\n");
             jda = new JDABuilder(AccountType.BOT).setToken(BOT_TOKEN)
                     .setGame(Game.playing(BOT_PREFIX + "help | namelessmc.com"))
-                    .addEventListener(new joinLeaveEvent(), new logsEvent(),new helpCmd(), new byeCmd(), new supportCmd(), new evalCmd())
+                    .addEventListener(new joinLeaveEvent(), new logsEvent(), new helpCmd(), new cheeseCmd(), new byeCmd(), new supportCmd(), new evalCmd())
                     .buildAsync();
         }
     }
