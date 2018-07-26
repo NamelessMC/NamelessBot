@@ -15,7 +15,7 @@ public class cheeseCmd extends ListenerAdapter {
         }
         if (event.getMessage().getContentRaw().startsWith(Bot.BOT_PREFIX + "cheese")) {
             if (canTalkCustom.canTalk(event.getTextChannel())) {
-                event.getChannel().sendMessage("Normal cheese: :cheese:\nSpace cheese: :cheesecubes:").queue();
+                event.getChannel().sendMessage("Normal cheese: :cheese:\nSpace cheese: <:cheesecubes:444274954553524227>").queue();
             }
         }
     }
