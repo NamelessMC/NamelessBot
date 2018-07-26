@@ -19,6 +19,7 @@ public class helpCmd extends ListenerAdapter {
                 EmbedBuilder embedBuilder = new EmbedBuilder().setTitle("Help (Prefix is " + Bot.BOT_PREFIX + ")").setColor(Bot.EMBED_COLOR)
                         .setDescription(
                                 "**help**: Display this message.\n" +
+                                "**cheese**: Display cheese.\n" +
                                 "**support [optional: parameter]**: Get quick support on common issues.\\*\n" +
                                 "**eval [optional: code]**: Evaluate some code. *Admins Only*\n" +
                                 "**bye**: Shut down the bot. *Admins Only*\n" +
