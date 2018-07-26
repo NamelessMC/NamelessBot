@@ -1,6 +1,7 @@
 package com.namelessmc.discord;
 
 import com.namelessmc.discord.cmds.byeCmd;
+import com.namelessmc.discord.cmds.cheeseCmd;
 import com.namelessmc.discord.cmds.evalCmd;
 import com.namelessmc.discord.cmds.helpCmd;
 import com.namelessmc.discord.cmds.supportCmd;
