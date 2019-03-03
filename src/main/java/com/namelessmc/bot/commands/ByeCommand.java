@@ -15,7 +15,11 @@ public class ByeCommand extends BotCommand {
 
     @Override
     public void execute(MessageReceivedEvent event, String aliasUsed, String[] args) {
-        sendBackMessage(event, MessageColor.SUCCESS, "Bye", "Ahhhhhh!", "The bot is shutting down! Panic!");
+        if (PermissionLevel.getLevel(event.getAuthor().getId()) != PermissionLevel.ADMIN) {
+            sendBackMessage(event, MessageColor.ERROR, "Error", null, "You don't have permission to shut down the bot.");
+            return;
+        }
+        sendBackMessage(event, MessageColor.ERROR, "Bye", "Ahhhhhh!", "The bot is shutting down! Panic!");
         try {
             TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {

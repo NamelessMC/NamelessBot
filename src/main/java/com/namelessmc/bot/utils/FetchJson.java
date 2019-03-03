@@ -11,6 +11,10 @@ import java.net.URL;
 public class FetchJson {
 
     public static JsonObject fromUrl(String url) {
+        return fromUrl(url, true);
+    }
+
+    public static JsonObject fromUrl(String url, boolean showException) {
         JsonObject jsonResponse = new JsonObject();
         try {
             URL obj = new URL(url);
@@ -41,7 +45,9 @@ public class FetchJson {
             }
             return jsonResponse;
         } catch (Exception e) {
-            e.printStackTrace();
+            if (showException) {
+                e.printStackTrace();
+            }
         }
         return jsonResponse;
     }

@@ -28,10 +28,8 @@ public class ArgDirCommandType extends BotCommandType {
                 }
                 sendBackMessage(event, MessageColor.OK, json.get("title").getAsString(), json.get("footer").getAsString(), "Available parameters: " + stringBuilder.toString());
             } else {
-                JsonObject json = FetchJson.fromUrl("https://raw.githubusercontent.com/NamelessMC/BotConfiguration/" + latestCommit + "/commands/" + URLEncoder.encode(command, "UTF-8") + "/" + URLEncoder.encode(args[0], "UTF-8") + ".json");
-                if (json.get("responseCode").getAsInt() == 404) {
-                    sendBackMessage(event, MessageColor.ERROR, "Error", null, "The parameter you requested doesn't exist.");
-                } else {
+                try {
+                    JsonObject json = FetchJson.fromUrl("https://raw.githubusercontent.com/NamelessMC/BotConfiguration/" + latestCommit + "/commands/" + URLEncoder.encode(command, "UTF-8") + "/" + URLEncoder.encode(args[0], "UTF-8") + ".json", false);
                     StringBuilder stringBuilder = new StringBuilder();
                     for (JsonElement lineElement : json.get("body").getAsJsonArray()) {
                         String line = lineElement.getAsString();
@@ -39,6 +37,8 @@ public class ArgDirCommandType extends BotCommandType {
                         stringBuilder.append(line);
                     }
                     sendBackMessage(event, MessageColor.OK, json.get("title").getAsString(), json.get("footer").getAsString(), stringBuilder.toString());
+                } catch (Exception e) {
+                    sendBackMessage(event, MessageColor.ERROR, "Error", null, "The parameter you requested doesn't exist.");
                 }
             }
         } catch (UnsupportedEncodingException e) {
