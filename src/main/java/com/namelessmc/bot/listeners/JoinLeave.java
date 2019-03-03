@@ -1,7 +1,7 @@
-package com.namelessmc.discord.events;
+package com.namelessmc.bot.listeners;
 
-import com.namelessmc.discord.Bot;
-import com.namelessmc.discord.functions.canTalkCustom;
+import com.namelessmc.bot.NamelessBot;
+import com.namelessmc.bot.types.MessageColor;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -10,7 +10,7 @@ import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-public class joinLeaveEvent extends ListenerAdapter {
+public class JoinLeave extends ListenerAdapter {
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         if (!event.getUser().isBot() && !event.getUser().isBot()) {
@@ -40,14 +40,12 @@ public class joinLeaveEvent extends ListenerAdapter {
             } else {
                 footerText = footerText + " (We've hit 1000 members! :tada: )";
             }
-            if (event.getGuild().getTextChannelsByName(Bot.WELCOME_MESSAGE_CHANNEL, true).size() > 0) {
-                TextChannel welcomeChannel = event.getGuild().getTextChannelsByName(Bot.WELCOME_MESSAGE_CHANNEL, true).get(0);
-                if (canTalkCustom.canTalk(welcomeChannel, true)) {
-                    EmbedBuilder embedBuilder = new EmbedBuilder().setTitle("User Join").setColor(Bot.EMBED_COLOR_GREEN)
-                            .setDescription("Welcome ``" + cleanUsername + "#" + eventUser.getDiscriminator() + "`` to the NamelessMC Discord.")
-                            .setFooter(footerText, null);
-                    welcomeChannel.sendMessage(embedBuilder.build()).queue();
-                }
+            if (event.getGuild().getTextChannelsByName(NamelessBot.WELCOME_CHANNEL_NAME, true).size() > 0) {
+                TextChannel welcomeChannel = event.getGuild().getTextChannelsByName(NamelessBot.WELCOME_CHANNEL_NAME, true).get(0);
+                EmbedBuilder embedBuilder = new EmbedBuilder().setTitle("User Join").setColor(MessageColor.SUCCESS.color)
+                        .setDescription("Welcome ``" + cleanUsername + "#" + eventUser.getDiscriminator() + "`` to the NamelessMC Discord.")
+                        .setFooter(footerText, null);
+                welcomeChannel.sendMessage(embedBuilder.build()).queue();
             }
         }
     }
@@ -81,14 +79,12 @@ public class joinLeaveEvent extends ListenerAdapter {
             } else {
                 footerText = footerText + " (We've hit 1000 members! :tada: )";
             }
-            if (event.getGuild().getTextChannelsByName(Bot.WELCOME_MESSAGE_CHANNEL, true).size() > 0) {
-                TextChannel welcomeChannel = event.getGuild().getTextChannelsByName(Bot.WELCOME_MESSAGE_CHANNEL, true).get(0);
-                if (canTalkCustom.canTalk(welcomeChannel, true)) {
-                    EmbedBuilder embedBuilder = new EmbedBuilder().setTitle("User Leave").setColor(Bot.EMBED_COLOR_RED)
-                            .setDescription("Goodbye ``" + cleanUsername + "#" + eventUser.getDiscriminator() + "``. Thanks for visiting the NamelessMC Discord.")
-                            .setFooter(footerText, null);
-                    welcomeChannel.sendMessage(embedBuilder.build()).queue();
-                }
+            if (event.getGuild().getTextChannelsByName(NamelessBot.WELCOME_CHANNEL_NAME, true).size() > 0) {
+                TextChannel welcomeChannel = event.getGuild().getTextChannelsByName(NamelessBot.WELCOME_CHANNEL_NAME, true).get(0);
+                EmbedBuilder embedBuilder = new EmbedBuilder().setTitle("User Leave").setColor(MessageColor.ERROR.color)
+                        .setDescription("Goodbye ``" + cleanUsername + "#" + eventUser.getDiscriminator() + "``. Thanks for visiting the NamelessMC Discord.")
+                        .setFooter(footerText, null);
+                welcomeChannel.sendMessage(embedBuilder.build()).queue();
             }
         }
     }

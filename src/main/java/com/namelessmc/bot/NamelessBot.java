@@ -1,42 +1,37 @@
-package com.namelessmc.discord;
+package com.namelessmc.bot;
 
-import com.namelessmc.discord.cmds.byeCmd;
-import com.namelessmc.discord.cmds.cheeseCmd;
-import com.namelessmc.discord.cmds.evalCmd;
-import com.namelessmc.discord.cmds.helpCmd;
-import com.namelessmc.discord.cmds.supportCmd;
-import com.namelessmc.discord.events.joinLeaveEvent;
-import com.namelessmc.discord.events.logsEvent;
-
+import com.namelessmc.bot.commands.ByeCommand;
+import com.namelessmc.bot.commands.HelpCommand;
+import com.namelessmc.bot.listeners.JoinLeave;
+import com.namelessmc.bot.listeners.MessageRecieved;
+import com.namelessmc.bot.types.BotCommand;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
 
-import java.awt.*;
-import java.io.*;
-import java.util.Properties;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.*;
 
-public class Bot {
+public class NamelessBot {
     private static String BOT_TOKEN;
     // Command prefix
     public static String BOT_PREFIX = ">";
+    // Github configuration branch
+    public static String BRANCH = "master";
     // Welcome message channel
-    public static String WELCOME_MESSAGE_CHANNEL = "welcome";
-    // Log channel
-    public static String LOGS_MESSAGE_CHANNEL = "logs";
-    // Colors used throughout the bot
-    public static Color EMBED_COLOR = new Color(0x0275D8);
-    public static Color EMBED_COLOR_GREEN = new Color(0x03D63E);
-    public static Color EMBED_COLOR_RED = new Color(0xD60334);
+    public static String WELCOME_CHANNEL_NAME = "welcome";
     // Users allowed to use the eval, bye, etc. commands
     public static String[] ADMIN_USER_IDS = {"209769851651227648"};
     // Channels that the bot is allowed to accept commands in
-    public static String[] ALLOWED_CHANNEL_PREFIXES = {"a", "d", "s", "logs", "bot-", "test-", "nameless", "support", "off-topic"};
-    // Channels the bot watches over :eyes:
-    public static String[] WATCH_CHANNELS = {"d", "nameless", "support", "off-topic", "adverts", "giveaway", "v2-plugin"};
-
+    public static String[] ALLOWED_CHANNEL_PREFIXES = {"a", "bot-", "d", "logs", "nameless", "off-topic", "s", "support", "test-"};
+    // The JDA instance
     public static JDA jda;
+    // The commands that are registered
+    public static Map<String, BotCommand> commands = new HashMap<>();
 
     public static void main(String[] arguments) throws Exception {
         System.out.print("\n");
@@ -49,23 +44,33 @@ public class Bot {
             PrintWriter botPropertiesFileWriter = new PrintWriter(botPropertiesFileName);
             botPropertiesFileWriter.print("# Nameless Bot Config\ntoken=PUT YOUR TOKEN HERE");
             botPropertiesFileWriter.close();
-            System.out.print("Bot Error > Config file did not exist, it has been created.\n");
+            System.out.println("Bot Error > Config file did not exist, it has been created.");
         } else {
             // Load properties
             InputStream botPropertiesInput = new FileInputStream(botPropertiesFileName);
             prop.load(botPropertiesInput);
             if (prop.containsKey("token") && prop.getProperty("token").equalsIgnoreCase("PUT YOUR TOKEN HERE")) {
-                System.out.print("Bot Error > The token isn't set.\n");
+                System.out.println("Bot Error > The token isn't set.");
                 System.exit(0);
             }
             // Set properties
             BOT_TOKEN = prop.getProperty("token");
             // Start bot
-            System.out.print("Bot > Starting bot...\n");
+            System.out.println("Bot > Starting bot...");
             jda = new JDABuilder(AccountType.BOT).setToken(BOT_TOKEN)
                     .setGame(Game.playing(BOT_PREFIX + "help | namelessmc.com"))
-                    .addEventListener(new joinLeaveEvent(), new logsEvent(), new helpCmd(), new cheeseCmd(), new byeCmd(), new supportCmd(), new evalCmd())
+                    .addEventListener(new JoinLeave(), new MessageRecieved())
                     .buildAsync();
+            // Register the commands
+            registerCommand(new ByeCommand());
+            registerCommand(new HelpCommand());
         }
+    }
+
+    public static void registerCommand(BotCommand botCommand) {
+        for (String alias : botCommand.aliases) {
+            commands.put(alias.toLowerCase(), botCommand);
+        }
+        System.out.println("Bot > Registered the command: " + botCommand.aliases[0]);
     }
 }

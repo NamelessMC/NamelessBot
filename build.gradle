@@ -5,11 +5,9 @@ plugins {
 }
 
 group 'NamelessMC'
-version '1.0-SNAPSHOT'
-
-mainClassName = 'com.namelessmc.discord.Bot'
-
 version '1.0'
+
+mainClassName = 'com.namelessmc.bot.NamelessBot'
 
 sourceCompatibility = 1.8
 
@@ -20,8 +18,9 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile group: 'net.dv8tion', name: 'JDA', version: '3.6.0_354'
+    compile group: 'net.dv8tion', name: 'JDA', version: '3.8.3_460'
     compile group: 'org.codehaus.groovy', name: 'groovy-jsr223', version: '2.4.12'
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
 }
 
 compileJava.options.encoding = 'UTF-8'
