@@ -6,12 +6,11 @@ import com.google.gson.JsonObject;
 import com.namelessmc.bot.NamelessBot;
 import com.namelessmc.bot.commands.types.ArgDirCommandType;
 import com.namelessmc.bot.commands.types.BasicCommandType;
+import com.namelessmc.bot.commands.types.CodeCommandType;
 import com.namelessmc.bot.utils.FetchJson;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Arrays;
 
 public class MessageRecieved extends ListenerAdapter {
@@ -22,6 +21,9 @@ public class MessageRecieved extends ListenerAdapter {
             return;
         }
         if (!event.getMessage().getContentRaw().startsWith(NamelessBot.BOT_PREFIX)) {
+            return;
+        }
+        if (!event.getChannelType().isGuild()) {
             return;
         }
         String commandUsed = event.getMessage().getContentRaw().toLowerCase().substring(1);
@@ -51,6 +53,8 @@ public class MessageRecieved extends ListenerAdapter {
                         } else if (command.get("type").getAsString().equalsIgnoreCase("argdir")) {
                             new ArgDirCommandType().execute(event, commitHash, commandAliases.get(0).getAsString(), args);
                             return;
+                        } else if (command.get("type").getAsString().equalsIgnoreCase("code")) {
+                            new CodeCommandType().execute(event, commitHash, commandAliases.get(0).getAsString(), args);
                         }
                     }
                 }
