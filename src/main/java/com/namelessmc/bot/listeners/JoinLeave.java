@@ -23,22 +23,22 @@ public class JoinLeave extends ListenerAdapter {
                 }
             }
             String footerText = "There are now " + memberCount + " members.";
-            Integer membersToGo = 1000 - memberCount;
+            Integer membersToGo = 2000 - memberCount;
             if (membersToGo > 0) {
                 if (membersToGo == 1) {
-                    footerText = footerText + " (" + membersToGo + " more member until 1,000!)";
+                    footerText = footerText + " (" + membersToGo + " more member until 2,000!)";
                 } else {
-                    footerText = footerText + " (" + membersToGo + " more members until 1,000.)";
+                    footerText = footerText + " (" + membersToGo + " more members until 2,000.)";
                 }
             } else if (membersToGo > 0) {
                 membersToGo = membersToGo * -1;
                 if (membersToGo == 1) {
-                    footerText = footerText + " (We now have " + membersToGo + " more member than 1,000!)";
+                    footerText = footerText + " (We now have " + membersToGo + " more member than 2,000!)";
                 } else {
-                    footerText = footerText + " (We now have " + membersToGo + " more members than 1,000!)";
+                    footerText = footerText + " (We now have " + membersToGo + " more members than 2,000!)";
                 }
             } else {
-                footerText = footerText + " (We've hit 1000 members! :tada: )";
+                footerText = footerText + " (We've hit 2000 members! :tada: )";
             }
             if (event.getGuild().getTextChannelsByName(NamelessBot.WELCOME_CHANNEL_NAME, true).size() > 0) {
                 TextChannel welcomeChannel = event.getGuild().getTextChannelsByName(NamelessBot.WELCOME_CHANNEL_NAME, true).get(0);
@@ -62,22 +62,22 @@ public class JoinLeave extends ListenerAdapter {
                 }
             }
             String footerText = "There are now " + memberCount + " members.";
-            Integer membersToGo = 1000 - memberCount;
+            Integer membersToGo = 2000 - memberCount;
             if (membersToGo > 0) {
                 if (membersToGo == 1) {
-                    footerText = footerText + " (" + membersToGo + " more member until 1,000!)";
+                    footerText = footerText + " (" + membersToGo + " more member until 2,000!)";
                 } else {
-                    footerText = footerText + " (" + membersToGo + " more members until 1,000.)";
+                    footerText = footerText + " (" + membersToGo + " more members until 2,000.)";
                 }
             } else if (membersToGo > 0) {
                 membersToGo = membersToGo * -1;
                 if (membersToGo == 1) {
-                    footerText = footerText + " (We now have " + membersToGo + " more member than 1,000!)";
+                    footerText = footerText + " (We now have " + membersToGo + " more member than 2,000!)";
                 } else {
-                    footerText = footerText + " (We now have " + membersToGo + " more members than 1,000!)";
+                    footerText = footerText + " (We now have " + membersToGo + " more members than 2,000!)";
                 }
             } else {
-                footerText = footerText + " (We've hit 1000 members! :tada: )";
+                footerText = footerText + " (We've hit 2000 members! :tada: )";
             }
             if (event.getGuild().getTextChannelsByName(NamelessBot.WELCOME_CHANNEL_NAME, true).size() > 0) {
                 TextChannel welcomeChannel = event.getGuild().getTextChannelsByName(NamelessBot.WELCOME_CHANNEL_NAME, true).get(0);
