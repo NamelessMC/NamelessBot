@@ -8,8 +8,8 @@ import com.namelessmc.bot.commands.types.ArgDirCommandType;
 import com.namelessmc.bot.commands.types.BasicCommandType;
 import com.namelessmc.bot.commands.types.CodeCommandType;
 import com.namelessmc.bot.utils.FetchJson;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.Arrays;
 

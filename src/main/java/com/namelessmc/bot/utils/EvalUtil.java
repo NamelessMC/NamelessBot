@@ -1,7 +1,7 @@
 package com.namelessmc.bot.utils;
 
 import com.google.gson.JsonObject;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;

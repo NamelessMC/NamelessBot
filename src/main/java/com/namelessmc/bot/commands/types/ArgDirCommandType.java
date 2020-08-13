@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.namelessmc.bot.types.BotCommandType;
 import com.namelessmc.bot.types.MessageColor;
 import com.namelessmc.bot.utils.FetchJson;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

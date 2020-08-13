@@ -5,10 +5,10 @@ import com.namelessmc.bot.commands.HelpCommand;
 import com.namelessmc.bot.listeners.JoinLeave;
 import com.namelessmc.bot.listeners.MessageRecieved;
 import com.namelessmc.bot.types.BotCommand;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,10 +57,10 @@ public class NamelessBot {
             BOT_TOKEN = prop.getProperty("token");
             // Start bot
             System.out.println("Bot > Starting bot...");
-            jda = new JDABuilder(AccountType.BOT).setToken(BOT_TOKEN)
-                    .setGame(Game.playing(BOT_PREFIX + "help | namelessmc.com"))
-                    .addEventListener(new JoinLeave(), new MessageRecieved())
-                    .buildAsync();
+            jda = JDABuilder.createDefault(BOT_TOKEN).enableIntents(GatewayIntent.GUILD_MEMBERS)
+                    .setActivity(Activity.playing(BOT_PREFIX + "help | namelessmc.com"))
+                    .addEventListeners(new JoinLeave(), new MessageRecieved())
+                    .build();
             // Register the commands
             registerCommand(new ByeCommand());
             registerCommand(new HelpCommand());

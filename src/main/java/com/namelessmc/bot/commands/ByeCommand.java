@@ -3,7 +3,7 @@ package com.namelessmc.bot.commands;
 import com.namelessmc.bot.types.BotCommand;
 import com.namelessmc.bot.types.MessageColor;
 import com.namelessmc.bot.types.PermissionLevel;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.concurrent.TimeUnit;
 

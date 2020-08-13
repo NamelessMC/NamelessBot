@@ -7,7 +7,7 @@ import com.namelessmc.bot.utils.Base58;
 import com.namelessmc.bot.utils.EvalUtil;
 import com.namelessmc.bot.utils.FetchJson;
 import com.namelessmc.bot.utils.MessageUtils;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.net.URLEncoder;
 

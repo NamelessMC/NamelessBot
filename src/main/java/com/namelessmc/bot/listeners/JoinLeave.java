@@ -2,13 +2,15 @@ package com.namelessmc.bot.listeners;
 
 import com.namelessmc.bot.NamelessBot;
 import com.namelessmc.bot.types.MessageColor;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+
+import javax.annotation.Nonnull;
 
 public class JoinLeave extends ListenerAdapter {
     @Override
@@ -23,7 +25,7 @@ public class JoinLeave extends ListenerAdapter {
                 }
             }
             String footerText = "There are now " + memberCount + " members.";
-            Integer membersToGo = 1000 - memberCount;
+            /*Integer membersToGo = 1000 - memberCount;
             if (membersToGo > 0) {
                 if (membersToGo == 1) {
                     footerText = footerText + " (" + membersToGo + " more member until 1,000!)";
@@ -39,7 +41,7 @@ public class JoinLeave extends ListenerAdapter {
                 }
             } else {
                 footerText = footerText + " (We've hit 1000 members! :tada: )";
-            }
+            }*/
             if (event.getGuild().getTextChannelsByName(NamelessBot.WELCOME_CHANNEL_NAME, true).size() > 0) {
                 TextChannel welcomeChannel = event.getGuild().getTextChannelsByName(NamelessBot.WELCOME_CHANNEL_NAME, true).get(0);
                 EmbedBuilder embedBuilder = new EmbedBuilder().setTitle("User Join").setColor(MessageColor.SUCCESS.color)
@@ -50,8 +52,9 @@ public class JoinLeave extends ListenerAdapter {
         }
     }
 
+
     @Override
-    public void onGuildMemberLeave(GuildMemberLeaveEvent event) {
+    public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent event) {
         if (!event.getUser().isBot() && !event.getUser().isBot()) {
             User eventUser = event.getUser();
             String cleanUsername = eventUser.getName().replace("`", "\\`");
@@ -62,7 +65,7 @@ public class JoinLeave extends ListenerAdapter {
                 }
             }
             String footerText = "There are now " + memberCount + " members.";
-            Integer membersToGo = 1000 - memberCount;
+            /*Integer membersToGo = 1000 - memberCount;
             if (membersToGo > 0) {
                 if (membersToGo == 1) {
                     footerText = footerText + " (" + membersToGo + " more member until 1,000!)";
@@ -78,7 +81,7 @@ public class JoinLeave extends ListenerAdapter {
                 }
             } else {
                 footerText = footerText + " (We've hit 1000 members! :tada: )";
-            }
+            }*/
             if (event.getGuild().getTextChannelsByName(NamelessBot.WELCOME_CHANNEL_NAME, true).size() > 0) {
                 TextChannel welcomeChannel = event.getGuild().getTextChannelsByName(NamelessBot.WELCOME_CHANNEL_NAME, true).get(0);
                 EmbedBuilder embedBuilder = new EmbedBuilder().setTitle("User Leave").setColor(MessageColor.ERROR.color)

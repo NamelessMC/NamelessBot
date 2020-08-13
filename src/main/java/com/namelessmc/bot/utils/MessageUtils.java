@@ -2,9 +2,9 @@ package com.namelessmc.bot.utils;
 
 import com.namelessmc.bot.NamelessBot;
 import com.namelessmc.bot.types.MessageColor;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class MessageUtils {
 
