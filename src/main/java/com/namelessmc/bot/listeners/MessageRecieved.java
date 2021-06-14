@@ -30,7 +30,7 @@ public class MessageRecieved extends ListenerAdapter {
         if (!event.getChannelType().isGuild()) {
             return;
         }
-        String commandUsed = event.getMessage().getContentRaw().toLowerCase().substring(1);
+        String commandUsed = event.getMessage().getContentRaw().toLowerCase().substring(NamelessBot.BOT_PREFIX.length());
         String[] args = {};
         if (commandUsed.contains(" ")) {
             commandUsed = commandUsed.split(" ")[0];

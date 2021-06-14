@@ -93,9 +93,9 @@ public class MessageReceivedOCR extends ListenerAdapter {
     private JsonObject matchResponse(String textToMatch) {
 
         // Get all the responses the bot can have
-        JsonObject githubJson =  FetchJson.fromUrl("https://api.github.com/repos/namelessmc/BotConfiguration/commits/" + NamelessBot.BRANCH);
+        JsonObject githubJson =  FetchJson.fromUrl("https://api.github.com/repos/namelessmc/BotConfiguration/commits/" + NamelessBot.BRANCH, false);
         String commitHash = githubJson.get("sha").getAsString();
-        JsonArray responses = FetchJson.asArrayFromUrl("https://raw.githubusercontent.com/namelessmc/BotConfiguration/" + commitHash + "/autoresponse.json");
+        JsonArray responses = FetchJson.asArrayFromUrl("https://raw.githubusercontent.com/namelessmc/BotConfiguration/" + commitHash + "/autoresponse.json", false);
 
         // Loop through each response
         for (int i = 0; i < responses.size(); i++) {
