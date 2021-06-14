@@ -21,3 +21,7 @@ public boolean thisReturnsTrue() {
     return true;
 }
 ```
+
+## Setting up
+
+To setup the discord bot, first build the bot and head to the directory where its saved. After which you can run the jar. If you run it for the first time, a new file called nameless-bot.properties will be created where you can input to `https://github.com/tesseract-ocr/tessdata/raw/master/eng.traineddata` and download the english training data for Tesseract to allow for image processing and extracting of text from it.

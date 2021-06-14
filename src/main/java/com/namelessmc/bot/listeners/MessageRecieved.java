@@ -8,25 +8,27 @@ import com.namelessmc.bot.commands.types.ArgDirCommandType;
 import com.namelessmc.bot.commands.types.BasicCommandType;
 import com.namelessmc.bot.commands.types.CodeCommandType;
 import com.namelessmc.bot.utils.FetchJson;
+import com.namelessmc.bot.utils.OCRProcessor;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.Arrays;
 
 public class MessageRecieved extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        if (event.getAuthor().isBot() || event.getAuthor().isFake()) {
-            return;
-        }
         if (!event.getMessage().getContentRaw().startsWith(NamelessBot.BOT_PREFIX)) {
             return;
         }
         if (!event.getChannelType().isGuild()) {
             return;
         }
-        String commandUsed = event.getMessage().getContentRaw().toLowerCase().substring(1);
+        String commandUsed = event.getMessage().getContentRaw().toLowerCase().substring(NamelessBot.BOT_PREFIX.length());
         String[] args = {};
         if (commandUsed.contains(" ")) {
             commandUsed = commandUsed.split(" ")[0];
@@ -36,10 +38,10 @@ public class MessageRecieved extends ListenerAdapter {
         if (NamelessBot.commands.containsKey(commandUsed)) {
             NamelessBot.commands.get(commandUsed).execute(event, commandUsed, args);
         } else {
-            JsonObject githubJson = FetchJson.fromUrl("https://api.github.com/repos/NamelessMC/BotConfiguration/commits/" + NamelessBot.BRANCH);
+            JsonObject githubJson = FetchJson.fromUrl("https://api.github.com/repos/Supercrafter100/BotConfiguration/commits/" + NamelessBot.BRANCH);
             String commitHash = githubJson.get("sha").getAsString();
 
-            JsonObject commands = FetchJson.fromUrl("https://raw.githubusercontent.com/NamelessMC/BotConfiguration/" + commitHash + "/commands.json");
+            JsonObject commands = FetchJson.fromUrl("https://raw.githubusercontent.com/Supercrafter100/BotConfiguration/" + commitHash + "/commands.json");
             JsonArray commandsArray = commands.get("commands").getAsJsonArray();
             for (JsonElement commandElement : commandsArray) {
                 JsonObject command = commandElement.getAsJsonObject();
