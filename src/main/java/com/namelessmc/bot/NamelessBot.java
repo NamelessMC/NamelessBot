@@ -3,6 +3,7 @@ package com.namelessmc.bot;
 import com.namelessmc.bot.commands.ByeCommand;
 import com.namelessmc.bot.commands.HelpCommand;
 import com.namelessmc.bot.listeners.JoinLeave;
+import com.namelessmc.bot.listeners.MessageReceivedOCR;
 import com.namelessmc.bot.listeners.MessageRecieved;
 import com.namelessmc.bot.types.BotCommand;
 import net.dv8tion.jda.api.JDA;
@@ -59,7 +60,7 @@ public class NamelessBot {
             System.out.println("Bot > Starting bot...");
             jda = JDABuilder.createDefault(BOT_TOKEN).enableIntents(GatewayIntent.GUILD_MEMBERS)
                     .setActivity(Activity.playing(BOT_PREFIX + "help | namelessmc.com"))
-                    .addEventListeners(new JoinLeave(), new MessageRecieved())
+                    .addEventListeners(new JoinLeave(), new MessageRecieved(), new MessageReceivedOCR())
                     .build();
             // Register the commands
             registerCommand(new ByeCommand());
