@@ -10,6 +10,8 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -59,6 +61,8 @@ public class NamelessBot {
             // Start bot
             System.out.println("Bot > Starting bot...");
             jda = JDABuilder.createDefault(BOT_TOKEN).enableIntents(GatewayIntent.GUILD_MEMBERS)
+                    .setMemberCachePolicy(MemberCachePolicy.ALL)
+                    .setChunkingFilter(ChunkingFilter.ALL)
                     .setActivity(Activity.playing(BOT_PREFIX + "help | namelessmc.com"))
                     .addEventListeners(new JoinLeave(), new MessageRecieved(), new MessageReceivedOCR())
                     .build();
