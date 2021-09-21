@@ -53,6 +53,7 @@ public class MessageReceivedOCR extends ListenerAdapter {
                         // Creating buffered image to do OCR on with tesseract
                         BufferedImage imgBuff = ImageIO.read(y);
                         String textOut = OCRProcessor.extractTextFromImage(imgBuff);
+                        textOut = textOut.replace("\n", " ");
 
                         JsonObject matchResponse = matchResponse(textOut);
                         if (matchResponse != null) {
