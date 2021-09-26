@@ -41,9 +41,6 @@ public class MessageReceivedOCR extends ListenerAdapter {
         // Check if message contains image attachments
         if (event.getMessage().getAttachments().stream().anyMatch(x -> x.isImage())) {
 
-            // React with a set of eyes if it does
-            event.getMessage().addReaction("\uD83D\uDC40").queue();
-
             // Loop through all attachments
             event.getMessage().getAttachments().stream().forEach(x -> {
                 if (!x.isImage()) return;
