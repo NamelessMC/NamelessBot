@@ -6,6 +6,9 @@
   "repository": "http://github.com/namelessmc/namelessbot",
   "author": "Supercrafter100",
   "license": "MIT",
+  "scripts": {
+    "build": "tsc --project tsconfig.json"
+  },
   "dependencies": {
     "@discordjs/builders": "^0.7.0",
     "@discordjs/rest": "^0.1.0-canary.0",
