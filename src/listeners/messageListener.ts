@@ -61,6 +61,7 @@ const runRegularChecks = async (text: string) => {
     text = text.replace(/\‘/g, '\'');
 
     // Loop through each response and execute it
+	delete require.cache[require.resolve(`../../data/${config.repositoryName}/autoresponse.js`)];
     const responses = require(`../../data/${config.repositoryName}/autoresponse.js`);
     for (const response of responses) {
         if (!keywordsMatch(response.keywords, text)) {
@@ -92,6 +93,7 @@ const runDebugChecks = async (text: string) => {
         return;
     }
 
+    delete require.cache[require.resolve(`../../data/${config.repositoryName}/debug_link_responses.js`)];
     const responses = require(`../../data/${config.repositoryName}/debug_link_responses.js`);
     for (const response of responses) {
         // Check if all keywords match
