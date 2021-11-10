@@ -1,0 +1,18 @@
+{
+    "token": "",
+    "organizationName": "NamelessMC",
+    "repositoryName": "BotConfiguration",
+    "branch": "master",
+    "guildID": "246705793066467328",
+    "prefix": ">",
+
+
+    "welcomeChannelId": "welcome",
+    "imageExtensions": [".png", ".jpg"],
+    "channelExclusions": { 
+        "commands": [],
+        "autoresponses": []
+    },
+
+    "botowners": []
+}
