@@ -1,9 +1,24 @@
-import { client, config } from '../index';
-import Tesseract from 'tesseract.js';
-import EmbedUtils from '../constants/EmbedUtil';
+import { client, config } from '../index.js';
+import Tesseract from 'node-tesseract-ocr';
+import EmbedUtils from '../constants/EmbedUtil.js';
 import fetch from 'node-fetch';
+import { MessageEmbed, TextChannel } from 'discord.js';
 
+
+const tesseractConfig = {
+    lang: 'eng',
+    oem: 1,
+    psm: 3
+};
+
+
+/**
+ * Used for automatic responses
+ */
 client.on('messageCreate', async (msg) => {
+
+
+    // Create a worker instead of just recognizing to prevent a child process from eating our ram in the background when we are not using it
     if (!msg.guild) return;
     if (msg.guild.id !== config.guildID) return;
     if (config.channelExclusions.autoresponses.includes(msg.channel.id)) return;
@@ -18,13 +33,11 @@ client.on('messageCreate', async (msg) => {
         if (!attachment.contentType?.includes('image')) {
             continue;
         }
+
         
         // Detect text on the image
         text += " ";
-        text += await Tesseract.recognize(
-            attachment.url,
-            'eng'
-        ).then((res) => res.data.text);   
+        text += await Tesseract.recognize(attachment.url, tesseractConfig);
     }
         
     // Check for any urls
@@ -36,10 +49,7 @@ client.on('messageCreate', async (msg) => {
             continue;
         }
         text += " ";
-        text += await Tesseract.recognize(
-            url,
-            'eng'
-        ).then((res) => res.data.text);
+        text += await Tesseract.recognize(url, tesseractConfig)
     }
         
     // Finally, add the message content itself
@@ -52,6 +62,71 @@ client.on('messageCreate', async (msg) => {
 
     if (matchRegular) EmbedUtils.sendResponse(msg, EmbedUtils.embedColor.OK, matchRegular.title, matchRegular.footer, matchRegular.body.join('\n'));
     if (matchDebug) EmbedUtils.sendResponse(msg, EmbedUtils.embedColor.OK, matchDebug.title, matchDebug.footer, matchDebug.body.join('\n'));
+})
+
+/**
+ * Used for message mention stuff
+ */
+client.on('messageCreate', async (msg) => {
+
+    if (!msg.guild) return;
+
+    if (!msg.member?.roles.cache.some((role) => config.supportRoles.includes(role.id))) {
+        return;
+    }
+
+    const regex = /<?https:\/\/discord.com\/channels\/(\d{18})\/(\d{18})\/(\d{18})>?/gm;
+    const matches = regex.exec(msg.content);
+
+    if (!matches) {
+        return;
+    }
+
+    if (matches[0].startsWith('<') && matches[0].endsWith('>')) {
+        return;
+    }
+    
+    const guildId = matches[1];
+    const channelId = matches[2];
+    const messageID = matches[3];
+
+    // Check if the guild from the link is the same as the guild we are in
+    if (msg.guild.id !== guildId) {
+        return;
+    }
+
+    // Fetch the channel
+    const channel = await msg.guild.channels.fetch(channelId).catch();
+    if (!channel || !(channel instanceof TextChannel)) {
+        return;
+    }
+
+    // Check if the user can view the channel
+    if (!channel.permissionsFor(msg.member!)?.has('VIEW_CHANNEL')) {
+        return;
+    }
+
+    const message = await channel.messages.fetch(messageID);
+    if (!message) {
+        return;
+    }
+
+    // If embed, send embed
+    if (message.embeds[0]) {
+        msg.channel.send({ embeds: [ message.embeds[0] ] });
+        return;
+    }    
+
+    // Send message content
+    const embed = new MessageEmbed()
+        .setAuthor(message.author.tag, message.author.avatarURL({ dynamic: true }) || "")
+        .setTimestamp(message.createdTimestamp)
+        .setDescription(message.content)
+        .setFooter(`Sent in: #${channel.name}`)
+        .setColor('#FBBF24');
+    
+    msg.channel.send({ embeds: [ embed ]});
+
 })
 
 const runRegularChecks = async (text: string) => {
