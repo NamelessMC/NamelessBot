@@ -34,6 +34,7 @@ CloneGitRepository(`${config.organizationName}/${config.repositoryName}`, config
 
 // OCR
 import './listeners/messageListener';
+import './listeners/LeaveJoinListener';
 
 client.on('ready', () => {
     console.log(`${client.user?.username} is ready...`);
