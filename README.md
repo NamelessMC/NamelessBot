@@ -29,4 +29,4 @@ function thisReturnsTrue() : boolean {
 3. Once you finish coding, run `npx tsc` to build the bot
 4. Run `npm run start` to run the compiled source
 
-To make sure that the OCR system works, head to `https://github.com/tesseract-ocr/tessdata/raw/master/eng.traineddata` and download the english training data for Tesseract.JS to allow for image processing and extracting of text from it. Put this file in the same directory as the `package.json`
+This bot uses Tesseract-ocr to automatically scan images for text. To install this, follow [this](https://github.com/tesseract-ocr/tessdoc/blob/main/Installation.md) tutorial.
