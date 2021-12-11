@@ -4,7 +4,6 @@ import { join } from 'path';
 
 export default (repoPath: string, branch: string, location: string) => {
     return new Promise<void>((resolve, reject) => {
-
         // Deleting the target folder if it already exists
         const folderName = repoPath.split('/').pop()!;
         deleteFolderRecursive(join(location, folderName));
@@ -13,7 +12,7 @@ export default (repoPath: string, branch: string, location: string) => {
         mkdirSync(location, { recursive: true });
 
         execSync(`git clone https://github.com/${repoPath} --branch ${branch}`, {
-            cwd: location
+            cwd: location,
         });
         resolve();
     });
@@ -22,13 +21,15 @@ export default (repoPath: string, branch: string, location: string) => {
 const deleteFolderRecursive = function(path: string) {
     if(existsSync(path) ) {
         readdirSync(path).forEach(function(file) {
-          var curPath = path + "/" + file;
+            const curPath = path + "/" + file;
             if(lstatSync(curPath).isDirectory()) { // recurse
+                console.log(`Deleting folder ${curPath}`);
                 deleteFolderRecursive(curPath);
             } else { // delete file
+                console.log(`Deleting file ${curPath}`);
                 unlinkSync(curPath);
             }
         });
         rmdirSync(path);
-      }
-  };
+    }
+};

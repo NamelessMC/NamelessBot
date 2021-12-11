@@ -13,7 +13,7 @@ client.on('guildMemberAdd', async (member) => {
     const members = await member.guild.members.fetch();
     const memberCount = members.filter(c => !c.user.bot).size;
 
-    const channel = (await member.guild.channels.fetch()).get(config.welcomeChannelId) as TextChannel;
+    const channel = await member.guild.channels.fetch(config.welcomeChannelId) as TextChannel;
     if (!channel) {
         return;
     }
@@ -28,7 +28,6 @@ client.on('guildMemberAdd', async (member) => {
 })
 
 client.on('guildMemberRemove', async (member) => {
-
     if (member.partial) member = await member.fetch();
 
     if (member.user.bot) {
@@ -40,7 +39,7 @@ client.on('guildMemberRemove', async (member) => {
     const members = await member.guild.members.fetch();
     const memberCount = members.filter(c => !c.user.bot).size;
 
-    const channel = (await member.guild.channels.fetch()).get(config.welcomeChannelName) as TextChannel;
+    const channel = await member.guild.channels.fetch(config.welcomeChannelId) as TextChannel;
     if (!channel) {
         return;
     }
