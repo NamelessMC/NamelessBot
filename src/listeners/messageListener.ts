@@ -75,7 +75,7 @@ client.on('messageCreate', async (msg) => {
         return;
     }
 
-    const regex = /<?https:\/\/discord.com\/channels\/(\d{18})\/(\d{18})\/(\d{18})>?/gm;
+    const regex = /<?https:\/\/([canary.]?)+discord.com\/channels\/(\d{18})\/(\d{18})\/(\d{18})>?/gm;
     const matches = regex.exec(msg.content);
 
     if (!matches) {
