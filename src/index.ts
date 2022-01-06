@@ -1,43 +1,49 @@
 // Imports
-import { Client, Intents } from 'discord.js';
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import { Client, Intents } from "discord.js";
+import { readFileSync } from "fs";
+import { join } from "path";
 
-import CloneGitRepository from './util/CloneGitRepository';
-import CommandHandler from './commands/commandHandler/commandHandler';
+import CloneGitRepository from "./util/CloneGitRepository";
+import CommandHandler from "./commands/commandHandler/commandHandler";
+
+// Load config
+const config = JSON.parse(readFileSync("./config.json", "utf8"));
+
+// Clone from the github repository to ensure we have the latest files
+CloneGitRepository(
+    `${config.organizationName}/${config.repositoryName}`,
+    config.branch,
+    join(__dirname, "../data")
+);
 
 const client = new Client({
-    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS],
+    intents: [
+        Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_MESSAGES,
+        Intents.FLAGS.GUILD_MEMBERS,
+    ],
     presence: {
         activities: [
             {
-                name: '>help | namelessmc.com',
-                type: 'PLAYING',
-            }
-        ]
-    }
+                name: ">help | namelessmc.com",
+                type: "PLAYING",
+            },
+        ],
+    },
 });
-
-const config = JSON.parse(readFileSync('./config.json', 'utf8'));
 
 // Load commands
 const cmdHandler = new CommandHandler(client);
 cmdHandler.loadCommands();
 
-export {
-    client,
-    config,
-}
-
-// Clone from the github repository to ensure we have the latest files
-CloneGitRepository(`${config.organizationName}/${config.repositoryName}`, config.branch, join(__dirname, '../data'));
+export { client, config };
 
 // OCR
-import './listeners/messageListener';
+import "./listeners/messageListener";
 // Join
-import './listeners/LeaveJoinListener';
+import "./listeners/LeaveJoinListener";
 
-client.on('ready', () => {
+client.on("ready", () => {
     console.log(`${client.user?.username} is ready...`);
 });
 
