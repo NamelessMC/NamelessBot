@@ -33,6 +33,20 @@ client.on("messageCreate", async (msg) => {
         text += await Tesseract.recognize(attachment.url, tesseractConfig);
     }
 
+    // Text attachments
+    for (const attachment of msg.attachments.toJSON()) {
+        if (!attachment.contentType?.includes("text")) {
+            continue;
+        }
+
+        const rawContent = await fetch(attachment.url.split("?")[0]).then(
+            (res) => res.text()
+        );
+
+        text += " ";
+        text += rawContent;
+    }
+
     // Check for any urls
     const urlRegex =
         /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi;
