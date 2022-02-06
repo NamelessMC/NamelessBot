@@ -1,5 +1,5 @@
 # NamelessBot
-NamelessMC Discord bot
+Support bot for the NamelessMC Discord server. If you're looking for our Discord website integration bot, please visit the [Nameless-Link](https://github.com/NamelessMC/Nameless-Link) repository instead.
 
 ## How do I contribute to the bot?
 There are a few ways of contributing to the bot for non developers and for developers. Here are two:
