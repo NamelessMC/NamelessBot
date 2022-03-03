@@ -1,26 +1,33 @@
 {
-  "name": "nameless-support",
+  "name": "Nameless-Support-2",
   "version": "1.0.0",
-  "description": "The NamelessMC support bot written in typescript",
-  "main": "dist/index.js",
-  "repository": "http://github.com/namelessmc/namelessbot",
-  "author": "Supercrafter100",
+  "main": "index.js",
   "license": "MIT",
-  "scripts": {
-    "start": "node dist/index.js",
-    "build": "tsc --project tsconfig.json"
-  },
   "dependencies": {
-    "@discordjs/builders": "^0.7.0",
-    "@discordjs/rest": "^0.1.0-canary.0",
-    "@types/node-fetch": "2",
-    "discord-api-types": "^0.24.0",
-    "discord.js": "^13.2.0",
+    "@crystaldevelopment/command-handler": "^1.0.5",
+    "chalk": "4",
+    "discord-api-types": "^0.26.1",
+    "discord.js": "^13.6.0",
+    "dotenv": "^16.0.0",
+    "nanoid": "^3.2.0",
     "node-fetch": "2",
     "tesseract.js": "^2.1.5"
   },
+  "scripts": {
+    "start": "node dist",
+    "build": "tsc",
+    "dev": "nodemon src/index.ts"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "data/*"
+    ]
+  },
   "devDependencies": {
-    "@types/node": "^16.11.2",
-    "typescript": "^4.4.4"
+    "@types/node": "^17.0.14",
+    "@types/node-fetch": "^2.6.1",
+    "nodemon": "^2.0.15",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.5"
   }
 }

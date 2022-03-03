@@ -4,3 +4,4 @@ eng.traineddata
 data/
 config.json
 todo.md
+.env

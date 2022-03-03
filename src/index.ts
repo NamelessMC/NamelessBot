@@ -1,50 +1,66 @@
-// Imports
-import { Client, Intents } from "discord.js";
-import { readFileSync } from "fs";
 import { join } from "path";
+import dotenv from "dotenv";
+import Logger from "./handlers/Logger";
+import chalk from "chalk";
+import Bot from "./managers/Bot";
+import { Intents, Options } from "discord.js";
+import { readFileSync } from "fs";
+import { Config } from "./types";
 
-import CloneGitRepository from "./util/CloneGitRepository";
-import CommandHandler from "./commands/commandHandler/commandHandler";
+dotenv.config();
 
-// Load config
-const config = JSON.parse(readFileSync("./config.json", "utf8"));
+const config = JSON.parse(readFileSync("config.json", "utf8")) as Config;
 
-// Clone from the github repository to ensure we have the latest files
-CloneGitRepository(
-    `${config.organizationName}/${config.repositoryName}`,
-    config.branch,
-    join(__dirname, "../data")
+// Setting up
+
+const logger = new Logger();
+logger.prefix = chalk.bold.redBright("MASTER");
+const devmode = process.env.npm_lifecylce_event == "dev";
+
+const logtype = devmode ? "warn" : "info";
+
+logger.blank();
+logger[logtype]("=================================");
+logger[logtype](
+    "Running bot in",
+    devmode ? chalk.red("DEV") : chalk.green("PROD"),
+    "mode"
+);
+logger[logtype]("=================================");
+logger.blank();
+
+const client = new Bot(
+    {
+        intents: [
+            Intents.FLAGS.GUILDS,
+            Intents.FLAGS.GUILD_MESSAGES,
+            Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+            Intents.FLAGS.GUILD_MEMBERS,
+        ],
+        partials: ["REACTION"],
+        makeCache: Options.cacheWithLimits({
+            MessageManager: 10,
+            PresenceManager: 0,
+        }),
+        presence: {
+            activities: [
+                {
+                    name: "/help | namelessmc.com",
+                    type: "PLAYING",
+                },
+            ],
+        },
+    },
+    config
 );
 
-const client = new Client({
-    intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_MEMBERS,
-    ],
-    presence: {
-        activities: [
-            {
-                name: ">help | namelessmc.com",
-                type: "PLAYING",
-            },
-        ],
-    },
-});
+client.events.load(join(__dirname, "events"));
+client.commands.loadFromDirectory(join(__dirname, "./commands"));
 
-// Load commands
-const cmdHandler = new CommandHandler(client);
-cmdHandler.loadCommands();
+if (client.devmode) {
+    client.login(process.env.DEV_TOKEN ?? process.env.TOKEN);
+} else {
+    client.login(process.env.TOKEN);
+}
 
-export { client, config };
-
-// OCR
-import "./listeners/messageListener";
-// Join
-import "./listeners/LeaveJoinListener";
-
-client.on("ready", () => {
-    console.log(`${client.user?.username} is ready...`);
-});
-
-client.login(config.token);
+export { client };
