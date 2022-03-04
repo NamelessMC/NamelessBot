@@ -1,8 +1,15 @@
 import { Message } from "discord.js";
 import { Event } from "../handlers/EventHandler";
-import Tesseract from "tesseract.js";
+// @ts-ignore
+import Tesseract from "node-tesseract-ocr";
 import fetch from "node-fetch";
 import { client } from "../index";
+
+const tesseractConfig = {
+    lang: "eng",
+    oem: 1,
+    psm: 3,
+  }
 
 export default class ReadyEvent extends Event<"messageCreate"> {
     public event = "messageCreate";
@@ -26,7 +33,7 @@ export default class ReadyEvent extends Event<"messageCreate"> {
                 continue;
             }
 
-            text += " " + (await Tesseract.recognize(attachment.url));
+            text += " " + (await Tesseract.recognize(attachment.url, tesseractConfig));
         }
 
         // Text attachments
@@ -51,7 +58,7 @@ export default class ReadyEvent extends Event<"messageCreate"> {
                 continue;
             }
 
-            text += " " + (await Tesseract.recognize(url));
+            text += " " + (await Tesseract.recognize(url, tesseractConfig));
         }
 
         // Replace artifacts that occur with OCR etc
