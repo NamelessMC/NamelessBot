@@ -1,18 +1,18 @@
 {
-    "token": "",
     "organizationName": "NamelessMC",
     "repositoryName": "BotConfiguration",
     "branch": "master",
     "guildID": "246705793066467328",
-    "prefix": ">",
 
+    "supportRoles": [
+        "350620079374860288",
+        "249918131345031178"
+    ],
 
-    "welcomeChannelId": "welcome",
-    "imageExtensions": [".png", ".jpg"],
-    "channelExclusions": { 
-        "commands": [],
-        "autoresponses": []
-    },
-
-    "botowners": []
+    "exclusions": [
+        "864174499325673472",
+        "580736157470556161"
+    ],
+    "welcomeChannelId": "335964434331860992",
+    "botowners": ["314046311035043840"]
 }
