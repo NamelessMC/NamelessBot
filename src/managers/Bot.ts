@@ -2,7 +2,6 @@ import chalk from "chalk";
 import Discord from "discord.js";
 import Logger from "../handlers/Logger";
 import EventHandler from "../handlers/EventHandler";
-// import Database from "../database/Database";
 import { CommandHandler } from "@crystaldevelopment/command-handler";
 import Embeds from "../util/Embeds";
 import { Config } from "../types";
@@ -23,7 +22,6 @@ export default class Bot extends Discord.Client<true> {
     //      Util
 
     public readonly logger = new Logger();
-    // public readonly database = new Database(this);
     public readonly embeds = new Embeds(this);
 
     public github: GHManager;
@@ -56,6 +54,5 @@ export default class Bot extends Discord.Client<true> {
     private async start() {
         await this.events.start();
         await this.github.cloneRepository();
-        // await this.database.start();
     }
 }

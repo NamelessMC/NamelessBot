@@ -8,9 +8,9 @@ export default class ReadyEvent extends Event<"messageCreate"> {
     public event = "messageCreate";
     public async run(msg: Message) {
         if (
-            !msg.guild ||
-            msg.guild.id !== client.config.guildID ||
-            client.config.exclusions.includes(msg.channel.id)
+            !msg.guild
+            || msg.guild.id !== client.config.guildID
+            || client.config.exclusions.includes(msg.channel.id)
         )
             return;
 
