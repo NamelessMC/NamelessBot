@@ -33,7 +33,7 @@ export default class InteractionCreate extends Event<"messageCreate"> {
             await msg.channel.send(
                 `Hey ${
                     msg.member?.nickname ?? msg.author.username
-                }! Please don't tag helpful/staff members directly.`
+                }! Please don't tag support members directly.`
             );
         }
     }
