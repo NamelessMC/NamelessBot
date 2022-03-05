@@ -45,7 +45,7 @@ const client = new Bot(
         presence: {
             activities: [
                 {
-                    name: "/help | namelessmc.com",
+                    name: "/support | namelessmc.com",
                     type: "PLAYING",
                 },
             ],
