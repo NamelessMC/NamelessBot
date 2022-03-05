@@ -3,9 +3,11 @@ import { ApplicationCommandOptionType } from "discord-api-types";
 import {
     ApplicationCommandOptionData,
     CommandInteraction,
-    GuildMember,
+    MessageActionRow,
+    MessageSelectMenu,
 } from "discord.js";
 import Bot from "../managers/Bot";
+import StringSimilarity from "string-similarity";
 
 export default class extends Command {
     public name = "support";
@@ -34,17 +36,18 @@ export default class extends Command {
             .getString("parameter")
             ?.toLowerCase();
 
+        const commandInfo = JSON.parse(
+            client.github.getFileFromRepo(`./commands/support.json`)
+        );
+
         // Return a list of all parameters if none are given
         if (!parameter) {
-            const commandInfo = JSON.parse(
-                client.github.getFileFromRepo(`./commands/support.json`)
-            );
             const embed = client.embeds
                 .base()
                 .setTitle(commandInfo.title)
                 .setDescription(
-                    "Available parameters: " +
-                        commandInfo.parameters
+                    "Available parameters: "
+                        + commandInfo.parameters
                             .map((c: string) => `\`${c}\``)
                             .join(", ")
                 );
@@ -65,10 +68,37 @@ export default class extends Command {
                 embeds: [client.embeds.MakeResponse(command)],
             });
         } catch {
-            return interaction.reply({
-                content: "That parameter doesn't exist",
-                ephemeral: true,
-            });
+            const matches = commandInfo.parameters.filter(
+                (c: string) =>
+                    StringSimilarity.compareTwoStrings(c, parameter) > 0.5
+            );
+
+            if (matches.length > 0) {
+                const row = new MessageActionRow().addComponents(
+                    new MessageSelectMenu()
+                        .setCustomId("support-parameter")
+                        .setPlaceholder("Select a parameter")
+                        .addOptions(
+                            matches.map((c: string) => {
+                                return {
+                                    label: c,
+                                    description: `Select paremeter ${c}`,
+                                    value: c,
+                                };
+                            })
+                        )
+                );
+                interaction.reply({
+                    content: "That parameter doesn't exist. Did you mean:",
+                    components: [row],
+                    ephemeral: true,
+                });
+            } else {
+                interaction.reply({
+                    content: "That parameter doesn't exist",
+                    ephemeral: true,
+                });
+            }
         }
     }
 }

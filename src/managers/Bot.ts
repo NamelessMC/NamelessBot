@@ -12,7 +12,7 @@ export default class Bot extends Discord.Client<true> {
     //      Handlers
 
     public readonly commands = new CommandHandler(this, {
-        guildId: process.env.GUILDID,
+        guildId: "246705793066467328",
         createCommands: true,
         updateCommands: true,
         deleteCommands: true,
