@@ -44,7 +44,7 @@ export default class Bot extends Discord.Client<true> {
             organisationName: this.config.organizationName,
             repositoryName: this.config.repositoryName,
             branch: this.config.branch,
-            location: join(__dirname, "../data"),
+            location: join(__dirname, "../../data"),
         });
 
         this.logger.info("Starting bot...");
