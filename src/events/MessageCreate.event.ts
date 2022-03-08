@@ -8,18 +8,18 @@ export default class InteractionCreate extends Event<"messageCreate"> {
     public async run(msg: Message) {
         if (!msg.guild || msg.guild?.id !== this.client.config.guildID) return;
 
+        if (msg.content.toLowerCase().startsWith(">support")) {
+            msg.reply(
+                "This command has been removed in favor of the /support command. Use this instead!"
+            );
+        }
+
         if (
             !msg.member?.roles.cache.some((role) =>
                 client.config.supportRoles.includes(role.id)
             )
         ) {
             return;
-        }
-
-        if (msg.content.toLowerCase().startsWith(">support")) {
-            msg.reply(
-                "This command has been removed in favor of the /support command. Use this instead!"
-            );
         }
 
         const regex =
