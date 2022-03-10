@@ -7,9 +7,9 @@ import { client } from "../index";
 
 const tesseractConfig = {
     lang: "eng",
-    oem: 1,
+    oem: 2,
     psm: 3,
-  }
+};
 
 export default class ReadyEvent extends Event<"messageCreate"> {
     public event = "messageCreate";
@@ -33,7 +33,9 @@ export default class ReadyEvent extends Event<"messageCreate"> {
                 continue;
             }
 
-            text += " " + (await Tesseract.recognize(attachment.url, tesseractConfig));
+            text +=
+                " "
+                + (await Tesseract.recognize(attachment.url, tesseractConfig));
         }
 
         // Text attachments
