@@ -47,7 +47,9 @@ export default class ReadyEvent extends Event<"messageCreate"> {
             const rawContent = await fetch(attachment.url.split("?")[0]).then(
                 (res) => res.text()
             );
-            text += " " + rawContent;
+
+            const content = checkForFatalLog(rawContent) ?? rawContent;
+            text += " " + content;
         }
 
         // Check for any urls
@@ -99,6 +101,21 @@ const runTextChecks = async (text: string) => {
             continue;
         }
 
+        // If we reference a different file then get that one
+        if (response.embed) {
+            try {
+                const content = client.github.getFileFromRepo(response.embed);
+                const embed = JSON.parse(content);
+                return embed;
+            } catch {
+                client.logger.error(
+                    "Failed to find embed data for "
+                        + response.embed
+                        + " or it was corrupted json."
+                );
+                continue;
+            }
+        }
         return response.response;
     }
 };
@@ -141,6 +158,35 @@ const isValidImageURL = (text: string) => {
         }
     }
     return false;
+};
+
+const checkForFatalLog = (content: string) => {
+    const regex = /\[(\d{4}-\d{2}-\d{2}), (\d{2}:\d{2}:\d{2})\] .+/gi;
+    if (!regex.exec(content.split("\n")[0]) == null) {
+        return;
+    }
+
+    const allowed = [];
+
+    const lines = content.split("\n");
+    for (const line of lines) {
+        const parsed = regex.exec(line);
+        if (parsed == null) continue; // No match
+
+        const date = parsed[1];
+        const time = parsed[2];
+
+        const dateTime = new Date(`${date} ${time}`);
+        const now = new Date();
+
+        if (now.getTime() - dateTime.getTime() > 1000 * 60 * 60 * 2) {
+            continue; // Ignore if older than 2 hours
+        }
+
+        allowed.push(line);
+    }
+
+    return allowed.join(" ");
 };
 
 const keywordsMatch = (keywords: [string[]], text: string) => {
