@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { execSync } from "child_process";
 import {
     existsSync,
@@ -10,6 +11,7 @@ import {
 } from "fs";
 import { join } from "path";
 import Bot from "../managers/Bot";
+import fetch from "node-fetch";
 
 interface GHOptions {
     organisationName: string;
@@ -19,10 +21,22 @@ interface GHOptions {
 }
 
 export default class GHManager {
+    private lastCommitHash: string = "";
+
     constructor(
         private readonly client: Bot,
         private readonly ghoptions: GHOptions
-    ) {}
+    ) {
+        this.init();
+    }
+
+    private async init() {
+        await this.checkRepoChange();
+        this.client.logger.info(
+            "Latest commit hash detected is",
+            chalk.blue(this.lastCommitHash)
+        );
+    }
 
     public async cloneRepository() {
         const folderName = this.ghoptions.repositoryName.split("/").pop()!;
@@ -67,5 +81,38 @@ export default class GHManager {
             });
             rmdirSync(path);
         }
+    }
+
+    public async updateChecker() {
+        setInterval(async () => {
+            const changed = await this.checkRepoChange();
+            if (!changed) {
+                return;
+            }
+
+            this.client.logger.warn(
+                "New commit hash detected",
+                chalk.blue(this.lastCommitHash)
+            );
+            this.client.logger.warn("Updating the bot data");
+            this.cloneRepository();
+        }, 60000 * 5);
+    }
+
+    private async checkRepoChange() {
+        const response = await fetch(
+            `https://api.github.com/repos/${this.ghoptions.organisationName}/${this.ghoptions.repositoryName}/commits/${this.ghoptions.branch}`
+        ).then((res) => res.json());
+        const sha: string = (response as any).sha;
+        if (!sha) {
+            return false;
+        }
+
+        if (sha != this.lastCommitHash) {
+            this.lastCommitHash = sha;
+            return true;
+        }
+
+        return false;
     }
 }

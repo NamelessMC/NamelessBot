@@ -54,5 +54,6 @@ export default class Bot extends Discord.Client<true> {
     private async start() {
         await this.events.start();
         await this.github.cloneRepository();
+        this.github.updateChecker();
     }
 }
