@@ -73,10 +73,14 @@ export default class ReadyEvent extends Event<"messageCreate"> {
         const debugLinkCheckResult = await runDebugChecks(text);
 
         if (textCheckResult) {
-            const sent = await msg.channel.send({
-                embeds: [client.embeds.MakeResponse(textCheckResult)],
-            });
-            await sent.react("🗑️");
+            if (textCheckResult.command !== undefined) {
+                await msg.channel.send(textCheckResult.command);
+            } else {
+                const sent = await msg.channel.send({
+                    embeds: [client.embeds.MakeResponse(textCheckResult.response)],
+                });
+                await sent.react("🗑️");
+            }
         }
         if (debugLinkCheckResult) {
             const sent = await msg.channel.send({
@@ -99,7 +103,7 @@ const runTextChecks = async (text: string) => {
             continue;
         }
 
-        return response.response;
+        return response;
     }
 };
 
