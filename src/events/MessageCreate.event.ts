@@ -35,7 +35,7 @@ export default class InteractionCreate extends Event<"messageCreate"> {
 
         const guildId = matches[2];
         const channelId = matches[3];
-        const messageID = matches[4];
+        const messageId = matches[4];
 
         // Check if the guild from the link is the same as the guild we are in
         if (msg.guild.id !== guildId) {
@@ -53,7 +53,7 @@ export default class InteractionCreate extends Event<"messageCreate"> {
             return;
         }
 
-        const message = await channel.messages.fetch(messageID);
+        const message = await channel.messages.fetch(messageId);
         if (!message) {
             return;
         }
