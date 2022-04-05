@@ -75,13 +75,13 @@ export default class ReadyEvent extends Event<"messageCreate"> {
         const debugLinkCheckResult = await runDebugChecks(text);
 
         if (textCheckResult) {
-            const sent = await msg.channel.send({
+            const sent = await msg.reply({
                 embeds: [client.embeds.MakeResponse(textCheckResult)],
             });
             await sent.react("🗑️");
         }
         if (debugLinkCheckResult) {
-            const sent = await msg.channel.send({
+            const sent = await msg.reply({
                 embeds: [client.embeds.MakeResponse(debugLinkCheckResult)],
             });
             await sent.react("🗑️");
