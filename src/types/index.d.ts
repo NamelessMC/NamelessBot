@@ -26,3 +26,8 @@ export interface JsonEmbedResponse {
     body: string[];
     footer: string;
 }
+
+export interface BinLink {
+    regex: string;
+    getLink: string;
+}

@@ -4,6 +4,7 @@ import { Event } from "../handlers/EventHandler";
 import Tesseract from "node-tesseract-ocr";
 import fetch from "node-fetch";
 import { client } from "../index";
+import { BinLink } from "../types";
 
 const tesseractConfig = {
     lang: "eng",
@@ -50,6 +51,24 @@ export default class ReadyEvent extends Event<"messageCreate"> {
 
             const content = checkForFatalLog(rawContent) ?? rawContent;
             text += " " + content;
+        }
+
+        // Paste links
+        const bins = JSON.parse(
+            client.github.getFileFromRepo("bin_links.json")
+        ) as BinLink[];
+        for (const bin of bins) {
+            const regex = RegexParser(bin.regex);
+            const matches = regex.exec(msg.content);
+            if (!matches) {
+                continue;
+            }
+
+            const link = await fetch(
+                bin.getLink.replace("{code}", matches[1])
+            ).then((res) => res.text());
+
+            text += " " + link;
         }
 
         // Check for any urls
@@ -149,6 +168,11 @@ const runDebugChecks = async (text: string) => {
     }
 };
 
+/**
+ * Check if a provided url is a valid image url
+ * @param text The url to check
+ * @returns if the url is a valid image url
+ */
 const isValidImageURL = (text: string) => {
     const cleanedURL = text.split("?")[0]; // Removes any parameters because nobody likes those
     const allowedExtensions = [".png", ".jpg", ".jpeg"];
@@ -160,6 +184,11 @@ const isValidImageURL = (text: string) => {
     return false;
 };
 
+/**
+ * Get the contents of a fatal log file that matter. Not ancient ones
+ * @param content The content to extract the fatal log from
+ * @returns The relevant content
+ */
 const checkForFatalLog = (content: string) => {
     const regex = /\[(\d{4}-\d{2}-\d{2}), (\d{2}:\d{2}:\d{2})\] .+/gi;
     if (!regex.exec(content.split("\n")[0]) == null) {
@@ -189,7 +218,13 @@ const checkForFatalLog = (content: string) => {
     return allowed.join(" ");
 };
 
-const keywordsMatch = (keywords: [string[]], text: string) => {
+/**
+ * Check whether the array of provided keywords match in the text.
+ * @param keywords The keywords to check for
+ * @param text The text to match the keywords with
+ * @returns Whether or not the keywords match the text
+ */
+const keywordsMatch = (keywords: [string[]], text: string): boolean => {
     // Keywords look a bit like [ ["keyword1", "keyword2"], ["keyword3"] ] | Each keyword is an array of strings and each array in the array is optional
     // but the words in those arrays are required
 
@@ -211,7 +246,14 @@ const keywordsMatch = (keywords: [string[]], text: string) => {
     return false;
 };
 
-const getDebugContents = async (debugID: string) => {
+/**
+ * Get the contents of the debug log from a specicif debug ID
+ * @param debugID The debug ID to get the contents of
+ * @returns The contents of the debug log associated with the ID
+ */
+const getDebugContents = async (
+    debugID: string
+): Promise<string | undefined> => {
     const paste = await fetch(
         `https://bytebin.rkslot.nl/${encodeURIComponent(debugID)}`
     )
@@ -222,4 +264,30 @@ const getDebugContents = async (debugID: string) => {
     }
 
     return undefined;
+};
+
+/**
+ * Convert a string form of regex to a regex object
+ * @param input The regex in string form
+ * @returns RegExp object
+ */
+const RegexParser = (input: string): RegExp => {
+    // Validate input
+    if (typeof input !== "string") {
+        throw new Error("Invalid input. Input must be a string");
+    }
+
+    // Parse input
+    const m = input.match(/(\/?)(.+)\1([a-z]*)/i);
+    if (m == null) {
+        throw new Error("Invalid input. Input must be in the format /(.*)/i");
+    }
+
+    // Invalid flags
+    if (m[3] && !/^(?!.*?(.).*?\1)[gmixXsuUAJ]+$/.test(m[3])) {
+        return RegExp(input);
+    }
+
+    // Create the regular expression
+    return new RegExp(m[2], m[3]);
 };
