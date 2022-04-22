@@ -37,7 +37,7 @@ const client = new Bot(
             Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
             Intents.FLAGS.GUILD_MEMBERS,
         ],
-        partials: ["REACTION"],
+        partials: ["REACTION", "MESSAGE", "USER"],
         makeCache: Options.cacheWithLimits({
             MessageManager: 10,
             PresenceManager: 0,

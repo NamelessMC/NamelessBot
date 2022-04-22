@@ -7,6 +7,7 @@ import Embeds from "../util/Embeds";
 import { Config } from "../types";
 import GHManager from "../handlers/GHManager";
 import { join } from "path/posix";
+import { Sequelize } from "sequelize";
 
 export default class Bot extends Discord.Client<true> {
     //      Handlers
@@ -25,6 +26,7 @@ export default class Bot extends Discord.Client<true> {
     public readonly embeds = new Embeds(this);
 
     public github: GHManager;
+    public sequelize: Sequelize;
 
     //      Misc
 
@@ -40,11 +42,17 @@ export default class Bot extends Discord.Client<true> {
         this.devmode = process.env.npm_lifecycle_event == "dev";
         this.extension = this.devmode ? ".ts" : ".js";
         this.config = config;
+
         this.github = new GHManager(this, {
             organisationName: this.config.organizationName,
             repositoryName: this.config.repositoryName,
             branch: this.config.branch,
             location: join(__dirname, "../../data"),
+        });
+        this.sequelize = new Sequelize({
+            dialect: "sqlite",
+            storage: join(__dirname, "../data/database.sqlite"),
+            logging: false,
         });
 
         this.logger.info("Starting bot...");
@@ -55,5 +63,6 @@ export default class Bot extends Discord.Client<true> {
         await this.events.start();
         await this.github.cloneRepository();
         this.github.updateChecker();
+        this.sequelize.sync();
     }
 }
