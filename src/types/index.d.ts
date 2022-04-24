@@ -31,3 +31,17 @@ export interface BinLink {
     regex: string;
     getLink: string;
 }
+
+export interface LanguageInfo {
+    language: string;
+    code: string;
+    total: number;
+    translated: number;
+    translated_percent: number;
+    total_words: number;
+    translated_words: number;
+    translated_words_percent: number;
+    total_chars: number;
+    translated_chars: number;
+    translated_chars_percent: number;
+}
