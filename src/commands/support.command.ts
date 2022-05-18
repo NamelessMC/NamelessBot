@@ -18,6 +18,7 @@ export default class extends Command {
             type: ApplicationCommandOptionType.String as number,
             description:
                 "The parameter to query, leave blank for a list of all parameters",
+            autocomplete: true,
         },
     ];
 
