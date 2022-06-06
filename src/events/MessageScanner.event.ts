@@ -159,7 +159,7 @@ const runDebugChecks = async (text: string) => {
     ];
     const responses = require(`../../data/${client.config.repositoryName}/debug_link_responses.js`);
     for (const response of responses) {
-        const result = await response.execute(debugContent);
+        const result = await response.execute(debugContent, text);
         if (
             typeof result == "undefined"
             || (typeof result === "boolean" && !result)
