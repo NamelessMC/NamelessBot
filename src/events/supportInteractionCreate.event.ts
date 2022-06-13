@@ -76,7 +76,9 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
                 });
 
                 interaction.reply({
-                    content: "Your support request has been created!",
+                    content:
+                        "Your support request has been created! View your thread here: "
+                        + thread.toString(),
                     ephemeral: true,
                 });
             }
