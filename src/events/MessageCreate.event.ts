@@ -1,4 +1,10 @@
-import { Message, MessageEmbed, TextChannel } from "discord.js";
+import {
+    Message,
+    MessageActionRow,
+    MessageButton,
+    MessageEmbed,
+    TextChannel,
+} from "discord.js";
 import { Event } from "../handlers/EventHandler";
 import { client } from "..";
 
@@ -7,6 +13,34 @@ export default class InteractionCreate extends Event<"messageCreate"> {
 
     public async run(msg: Message) {
         if (!msg.guild || msg.guild?.id !== this.client.config.guildID) return;
+
+        // Stop thread creation messages
+        if (
+            msg.channel.id === this.client.config.supportChannelId
+            && msg.embeds.length == 0
+        ) {
+            msg.delete();
+        }
+
+        // quick embed shit
+        if (
+            msg.content.toLowerCase().startsWith("!embed")
+            && msg.member?.permissions.has("MANAGE_MESSAGES")
+        ) {
+            const embed = this.client.embeds.base();
+            embed.setDescription(
+                this.client.config.supportEmbedDescription.join("\n")
+            );
+
+            const row = new MessageActionRow().addComponents(
+                new MessageButton()
+                    .setCustomId("get-support")
+                    .setLabel("Create question")
+                    .setStyle("SUCCESS")
+            );
+
+            msg.channel.send({ embeds: [embed], components: [row] });
+        }
 
         if (msg.content.toLowerCase().startsWith(">support")) {
             msg.reply(
