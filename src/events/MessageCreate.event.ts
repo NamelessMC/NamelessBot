@@ -31,6 +31,9 @@ export default class InteractionCreate extends Event<"messageCreate"> {
             embed.setDescription(
                 this.client.config.supportEmbedDescription.join("\n")
             );
+            embed.setFooter({
+                text: "by clicking the button you aree that any mesages posted in the thread will be licensed under cc by-nc-sa",
+            });
 
             const row = new MessageActionRow().addComponents(
                 new MessageButton()
