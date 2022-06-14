@@ -71,7 +71,10 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
                 const embed = this.client.embeds.base();
                 embed.setDescription(description);
 
-                await thread.send(description);
+                let sentMsg = await thread.send(description);
+                sentMsg.author = interaction.user;
+                sentMsg.content = title + "\n\n" + sentMsg.content;
+                this.client.emit("messageCreate", sentMsg); // Emit messageCreate event to run debug link checks
 
                 interaction.reply({
                     content:

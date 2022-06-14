@@ -12,7 +12,12 @@ export default class InteractionCreate extends Event<"messageCreate"> {
     public event = "messageCreate";
 
     public async run(msg: Message) {
-        if (!msg.guild || msg.guild?.id !== this.client.config.guildID) return;
+        if (
+            !msg.guild
+            || msg.guild?.id !== this.client.config.guildID
+            || msg.author.bot
+        )
+            return;
 
         // Stop thread creation messages
         if (
