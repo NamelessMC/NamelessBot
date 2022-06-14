@@ -14,7 +14,7 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
     public async run(interaction: Interaction) {
         if (interaction.isButton()) {
             const buttonId = interaction.customId;
-            if (buttonId == "get-support") {
+            if (buttonId === "get-support") {
                 const modal = new Modal();
                 modal.setCustomId("support-modal");
                 modal.setTitle("New support request");
@@ -71,9 +71,7 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
                 const embed = this.client.embeds.base();
                 embed.setDescription(description);
 
-                await thread.send({
-                    embeds: [embed],
-                });
+                await thread.send(description);
 
                 interaction.reply({
                     content:
