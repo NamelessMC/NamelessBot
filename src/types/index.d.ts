@@ -21,6 +21,7 @@ export interface Config {
     botOwners: string[];
     supportChannelId: string;
     supportEmbedDescription: string[];
+    supportMentionRoleId: string;
 }
 
 export interface JsonEmbedResponse {

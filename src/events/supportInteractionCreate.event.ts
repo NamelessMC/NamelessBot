@@ -71,6 +71,10 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
                 const embed = this.client.embeds.base();
                 embed.setDescription(description);
 
+                await thread.send(
+                    `<@&${this.client.config.supportMentionRoleId}>`
+                );
+
                 let sentMsg = await thread.send(description);
                 sentMsg.author = interaction.user;
                 sentMsg.content = title + "\n\n" + sentMsg.content;

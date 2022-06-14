@@ -19,6 +19,8 @@ export default class ReadyEvent extends Event<"messageCreate"> {
             !msg.guild
             || msg.guild.id !== client.config.guildID
             || client.config.exclusions.includes(msg.channel.id)
+            || msg.author.bot
+            || msg.author.system
         )
             return;
 
