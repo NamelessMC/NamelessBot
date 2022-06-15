@@ -27,8 +27,8 @@ export default class extends Subcommand {
                 "This command can only be used in a thread"
             );
 
+        await interaction.reply({ content: "Thread closed", ephemeral: true });
         await interaction.channel.setLocked(true, "Thread closed");
         await interaction.channel.setArchived(true, "Thread closed");
-        interaction.reply({ content: "Thread closed", ephemeral: true });
     }
 }
