@@ -28,7 +28,7 @@ export default class extends Subcommand {
 
     public async run(interaction: CommandInteraction): Promise<any> {
         if (!interaction.guild || !(interaction.member instanceof GuildMember))
-            return; // Its definitly defined
+            return; // Its definitely defined
 
         if (!interaction.channel?.isThread())
             return interaction.reply(
