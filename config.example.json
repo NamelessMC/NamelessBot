@@ -14,5 +14,37 @@
         "580736157470556161"
     ],
     "welcomeChannelId": "335964434331860992",
-    "botowners": ["314046311035043840"]
+    "botowners": ["314046311035043840"],
+    "supportChannelId": "247865182477484032",
+    "supportMentionRoleId": "249918131345031178",
+    "supportEmbedDescription": [
+        "**Things we do not help with:**",
+        "> • If you are experiencing issues with third party templates or modules, please ask the template authors for support. We cannot assist you with them.",
+        "> • When you are using a pirated template or module. (this will get you banned)",
+        "> • If you are using an old version of NamelessMC. It is difficult to provide support for old versions, as the issue may have been solved in a more recent update.",
+        "",
+        "**Before you create a thread:**",
+        "> • `CTRL` + `F` and see if the question has already been answered",
+        "> • See if you can find the information on the documentation (https://docs.namelessmc.com/)",
+        "> • Current known issues and workarounds: https://github.com/NamelessMC/Nameless/issues/2822",
+        "",
+        "**Creating a thread in this channel:**",
+        "> Click the button at the bottom of this embed to start the process of creating a thread.",
+        "",
+        "**Some tips to get a quick answer:**",
+        "> • Make sure your issue has a **meaningful title**",
+        ">  ✅ \"*PHPMailer isn't sending emails*\", \"*Error during installation*\", \"*How do I get custom badge colours*\"",
+        ">  ❌ \"Help\", \"My website doesn't work\", \"Hello\"",
+        "> ** **",
+        "> • Provide **all the information** we need to look into the problem",
+        "> - The exact error you see (do not rephrase the error message!) (*including the full stack trace*)",
+        "> - What you did when the error happened",
+        "", 
+        "**Question not answered?**",
+        "> ✅ **Reopen** threads, if you still have questions or extend the thread duration", 
+        "> ✅ **Refer** to previous threads, if you found more information after some time", 
+        "> ✅ **Rephrase** your question, provide more information or clarify what you expect as an answer",
+        "> ❌ Ping individual members or staff that aren't already involved",
+        "> ❌ Create many duplicate threads for the same question"
+    ]
 }

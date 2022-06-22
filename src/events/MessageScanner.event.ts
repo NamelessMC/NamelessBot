@@ -19,6 +19,8 @@ export default class ReadyEvent extends Event<"messageCreate"> {
             !msg.guild
             || msg.guild.id !== client.config.guildID
             || client.config.exclusions.includes(msg.channel.id)
+            || msg.author.bot
+            || msg.author.system
         )
             return;
 
@@ -94,16 +96,14 @@ export default class ReadyEvent extends Event<"messageCreate"> {
         const debugLinkCheckResult = await runDebugChecks(text);
 
         if (textCheckResult) {
-            const sent = await msg.reply({
+            await msg.reply({
                 embeds: [client.embeds.MakeResponse(textCheckResult)],
             });
-            await sent.react("🗑️");
         }
         if (debugLinkCheckResult) {
-            const sent = await msg.reply({
+            await msg.reply({
                 embeds: [client.embeds.MakeResponse(debugLinkCheckResult)],
             });
-            await sent.react("🗑️");
         }
     }
 }
