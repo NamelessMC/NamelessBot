@@ -28,6 +28,22 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
         }
 
         if (
+            interaction.isSelectMenu()
+            && interaction.customId == "docs-parameter"
+        ) {
+            const command = JSON.parse(
+                this.client.github.getFileFromRepo(
+                    `./commands/docs/${interaction.values[0]}.json`
+                )
+            );
+            if (!command) return;
+
+            return interaction.reply({
+                embeds: [this.client.embeds.MakeResponse(command)],
+            });
+        }
+
+        if (
             interaction.isAutocomplete()
             && interaction.commandName == "support"
         ) {
