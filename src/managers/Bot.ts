@@ -51,7 +51,7 @@ export default class Bot extends Discord.Client<true> {
         });
         this.sequelize = new Sequelize({
             dialect: "sqlite",
-            storage: join(__dirname, "../data/database.sqlite"),
+            storage: join(__dirname, "../../data/database.sqlite"),
             logging: false,
         });
 

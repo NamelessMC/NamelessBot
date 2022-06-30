@@ -13,9 +13,11 @@ export default class Embeds {
     }
 
     public MakeResponse(data: JsonEmbedResponse) {
-        return this.base()
+        const embed = this.base()
             .setTitle(data.title)
-            .setDescription(data.body.join("\n"))
-            .setFooter({ text: data.footer });
+            .setDescription(data.body.join("\n"));
+
+        if (data.footer) embed.setFooter({ text: data.footer });
+        return embed;
     }
 }

@@ -238,11 +238,13 @@ const keywordsMatch = (keywords: [string[]], text: string): boolean => {
 
     // Check if any of the keywords match
     for (const keywordGroup of keywords) {
-        if (
-            keywordGroup.every((c) =>
-                text.toLowerCase().includes(c.toLowerCase())
-            )
-        ) {
+        const matchesEvery = keywordGroup.every((c) => {
+            if (typeof c == "object" && (c as RegExp).test(text)) return true;
+            else if (typeof c == "string" && text.includes(c)) return true;
+            return false;
+        });
+
+        if (matchesEvery) {
             return true;
         }
     }
