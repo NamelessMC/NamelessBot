@@ -5,6 +5,7 @@ import Tesseract from "node-tesseract-ocr";
 import fetch from "node-fetch";
 import { client } from "../index";
 import { BinLink } from "../types";
+import AutoResponseManager from "../managers/AutoResponseManager";
 
 const tesseractConfig = {
     lang: "eng",
@@ -92,12 +93,13 @@ export default class ReadyEvent extends Event<"messageCreate"> {
         text = text.replace(/\‘/g, "'");
 
         // Run both debug link checks and regular checks
-        const textCheckResult = await runTextChecks(text);
+        const TextAutoResponse = new AutoResponseManager(text);
+        const textCheckResult = await TextAutoResponse.run();
         const debugLinkCheckResult = await runDebugChecks(text);
 
         if (textCheckResult) {
             await msg.reply({
-                embeds: [client.embeds.MakeResponse(textCheckResult)],
+                embeds: [textCheckResult],
             });
         }
         if (debugLinkCheckResult) {
@@ -107,37 +109,6 @@ export default class ReadyEvent extends Event<"messageCreate"> {
         }
     }
 }
-
-const runTextChecks = async (text: string) => {
-    delete require.cache[
-        require.resolve(
-            `../../data/${client.config.repositoryName}/autoresponse.js`
-        )
-    ];
-    const responses = require(`../../data/${client.config.repositoryName}/autoresponse.js`);
-    for (const response of responses) {
-        if (!keywordsMatch(response.keywords, text)) {
-            continue;
-        }
-
-        // If we reference a different file then get that one
-        if (response.embed) {
-            try {
-                const content = client.github.getFileFromRepo(response.embed);
-                const embed = JSON.parse(content);
-                return embed;
-            } catch {
-                client.logger.error(
-                    "Failed to find embed data for "
-                        + response.embed
-                        + " or it was corrupted json."
-                );
-                continue;
-            }
-        }
-        return response.response;
-    }
-};
 
 const runDebugChecks = async (text: string) => {
     const regex = /https:\/\/debug\.namelessmc\.com\/([^\s]*)/gim;
@@ -219,36 +190,6 @@ const checkForFatalLog = (content: string) => {
     }
 
     return allowed.join(" ");
-};
-
-/**
- * Check whether the array of provided keywords match in the text.
- * @param keywords The keywords to check for
- * @param text The text to match the keywords with
- * @returns Whether or not the keywords match the text
- */
-const keywordsMatch = (keywords: [string[]], text: string): boolean => {
-    // Keywords look a bit like [ ["keyword1", "keyword2"], ["keyword3"] ] | Each keyword is an array of strings and each array in the array is optional
-    // but the words in those arrays are required
-
-    // If no keywords are given just return true
-    if (keywords.length < 1) {
-        return true;
-    }
-
-    // Check if any of the keywords match
-    for (const keywordGroup of keywords) {
-        const matchesEvery = keywordGroup.every((c) => {
-            if (typeof c == "object" && (c as RegExp).test(text)) return true;
-            else if (typeof c == "string" && text.includes(c)) return true;
-            return false;
-        });
-
-        if (matchesEvery) {
-            return true;
-        }
-    }
-    return false;
 };
 
 /**
