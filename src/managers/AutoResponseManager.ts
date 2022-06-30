@@ -1,4 +1,3 @@
-import { Message, ModalSubmitInteraction } from "discord.js";
 import { client } from "..";
 import { JsonEmbedResponse } from "../types";
 
@@ -33,7 +32,7 @@ export default class {
         }
     }
 
-    private async keywordsMatch(keywords: [string[]], text: string) {
+    private keywordsMatch(keywords: [string[]], text: string) {
         // If no keywords are given just return true
         if (keywords.length < 1) {
             return true;
