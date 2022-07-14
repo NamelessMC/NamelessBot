@@ -13,7 +13,7 @@ PingCount.init(
             allowNull: false,
         },
         count: {
-            type: DataTypes.NUMBER,
+            type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0,
         },

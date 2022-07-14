@@ -9,6 +9,7 @@
     "discord-api-types": "^0.26.1",
     "discord.js": "^13.8.0",
     "dotenv": "^16.0.0",
+    "mysql2": "^2.3.3",
     "nanoid": "^3.2.0",
     "node-fetch": "2",
     "node-tesseract-ocr": "^2.2.1",

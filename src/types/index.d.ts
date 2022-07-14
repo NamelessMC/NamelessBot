@@ -24,6 +24,11 @@ export interface Config {
     supportMentionRoleId: string;
 }
 
+export interface AutoResponse {
+    keywords: [string[]];
+    response: JsonEmbedResponse;
+}
+
 export interface JsonEmbedResponse {
     title: string;
     body: string[];

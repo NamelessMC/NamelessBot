@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { GuildChannel, Message } from "discord.js";
 import { Event } from "../handlers/EventHandler";
 // @ts-ignore
 import Tesseract from "node-tesseract-ocr";
@@ -6,6 +6,7 @@ import fetch from "node-fetch";
 import { client } from "../index";
 import { BinLink } from "../types";
 import AutoResponseManager from "../managers/AutoResponseManager";
+import StatisticsManager from "../managers/StatisticsManager";
 
 const tesseractConfig = {
     lang: "eng",
@@ -94,10 +95,16 @@ export default class ReadyEvent extends Event<"messageCreate"> {
 
         // Run both debug link checks and regular checks
         const TextAutoResponse = new AutoResponseManager(text);
-        const textCheckResult = await TextAutoResponse.run();
+        await TextAutoResponse.run();
+        const textCheckResult = TextAutoResponse.getResponse();
+
         const debugLinkCheckResult = await runDebugChecks(text);
 
         if (textCheckResult) {
+            StatisticsManager.SaveResponse(
+                TextAutoResponse.result!,
+                msg.channel as GuildChannel
+            );
             await msg.reply({
                 embeds: [textCheckResult],
             });

@@ -50,8 +50,12 @@ export default class Bot extends Discord.Client<true> {
             location: join(__dirname, "../../data"),
         });
         this.sequelize = new Sequelize({
-            dialect: "sqlite",
-            storage: join(__dirname, "../../data/database.sqlite"),
+            dialect: "mysql",
+            host: process.env.DB_HOST,
+            port: Number(process.env.DB_PORT),
+            username: process.env.DB_USER,
+            password: process.env.DB_PASS,
+            database: process.env.DB_NAME,
             logging: false,
         });
 

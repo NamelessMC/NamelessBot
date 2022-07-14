@@ -3,28 +3,38 @@ import { JsonEmbedResponse } from "../types";
 
 export default class {
     private content: string;
+    public responsesFile = `../../data/${client.config.repositoryName}/autoresponse.js`;
 
-    private responsesFile = `../../data/${client.config.repositoryName}/autoresponse.js`;
+    public result: JsonEmbedResponse | undefined;
 
     constructor(content: string) {
         this.content = content;
     }
 
-    public async run() {
-        const response = await this.runChecks();
-        if (!response) return;
+    public getResponse() {
+        if (!this.result) {
+            return;
+        }
+        return client.embeds.MakeResponse(this.result);
+    }
 
-        const embed = client.embeds.MakeResponse(response);
-        return embed;
+    public async run() {
+        this.result = await this.runChecks();
+        return this.result;
     }
 
     private async runChecks(): Promise<JsonEmbedResponse | undefined> {
-        // Delete old cache in case it got changed
+        // Delete old cache in case it got changed. Its not that important
         delete require.cache[require.resolve(this.responsesFile)];
         const responses = require(this.responsesFile);
 
         for (const response of responses) {
-            if (!this.keywordsMatch(response.keywords, this.content)) {
+            if (
+                !this.keywordsMatch(
+                    response.keywords,
+                    this.content.toLowerCase()
+                )
+            ) {
                 continue;
             }
 
@@ -43,7 +53,8 @@ export default class {
             const matchesEvery = keywordGroup.every((c) => {
                 if (typeof c == "object" && (c as RegExp).test(text))
                     return true;
-                else if (typeof c == "string" && text.includes(c)) return true;
+                else if (typeof c == "string" && text.includes(c.toLowerCase()))
+                    return true;
                 return false;
             });
 

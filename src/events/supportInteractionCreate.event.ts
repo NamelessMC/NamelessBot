@@ -69,9 +69,12 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
                 );
 
                 // Check if we have an automatic response for their issue
-                const autoResponse = await new AutoResponseManager(
+                const autoResponseManager = new AutoResponseManager(
                     title + " " + description
-                ).run();
+                );
+                await autoResponseManager.run();
+                const autoResponse = autoResponseManager.getResponse();
+
                 if (autoResponse) {
                     // Send this response. If they continue to have an issue, we can create a thread anyways
                     const buttonId = nanoid();
