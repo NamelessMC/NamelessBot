@@ -9,10 +9,12 @@ import {
     MessageButton,
     ModalSubmitInteraction,
     ButtonInteraction,
+    GuildChannel,
 } from "discord.js";
 import { Event } from "../handlers/EventHandler";
 import AutoResponseManager from "../managers/AutoResponseManager";
 import { nanoid } from "nanoid";
+import StatisticsManager from "../managers/StatisticsManager";
 
 type issue = {
     title: string;
@@ -89,6 +91,11 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
                         title,
                         content: description,
                     });
+
+                    StatisticsManager.SaveResponse(
+                        autoResponseManager.result!,
+                        interaction.channel as GuildChannel
+                    );
 
                     await interaction.reply({
                         ephemeral: true,
