@@ -104,7 +104,7 @@ export default class ReadyEvent extends Event<"messageCreate"> {
             StatisticsManager.SaveResponse(
                 TextAutoResponse.result!,
                 msg.channel as GuildChannel
-            );
+            ); // Statistics
             await msg.reply({
                 embeds: [textCheckResult],
             });

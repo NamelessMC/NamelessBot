@@ -1,6 +1,7 @@
 import { GuildChannel } from "discord.js";
 import Response_Statistic from "../models/statistics/Response.statistic";
 import ResponseChannel_Statistic from "../models/statistics/ResponseChannel.statistics";
+import ThreadCreation_Statistic from "../models/statistics/ThreadCreation.statistic";
 import { AutoResponse, JsonEmbedResponse } from "../types";
 import AutoResponseManager from "./AutoResponseManager";
 
@@ -48,5 +49,28 @@ export default class {
         );
         item2.requested++;
         await item2.save();
+    }
+
+    public static async IncreaseThreadCreate() {
+        const date = new Date();
+        const day = date.getDate();
+        const month = date.getMonth();
+        const year = date.getFullYear();
+
+        const [item, _created] = await ThreadCreation_Statistic.findOrCreate({
+            where: {
+                day,
+                month,
+                year,
+            },
+            defaults: {
+                day,
+                month,
+                year,
+            },
+        });
+
+        item.amount++;
+        await item.save();
     }
 }

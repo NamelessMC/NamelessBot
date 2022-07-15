@@ -95,7 +95,7 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
                     StatisticsManager.SaveResponse(
                         autoResponseManager.result!,
                         interaction.channel as GuildChannel
-                    );
+                    ); // Statistics
 
                     await interaction.reply({
                         ephemeral: true,
@@ -127,6 +127,8 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
         title: string,
         content: string
     ) {
+        StatisticsManager.IncreaseThreadCreate(); // Statistics
+
         const channel = interaction.channel as TextChannel;
         const thread = await channel.threads.create({
             name: title,
