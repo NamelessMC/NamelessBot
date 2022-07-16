@@ -6,13 +6,8 @@ export default class Logger {
     //
 
     public static makeSize(string: string, length: number): string {
-        if (string.length >= length) return string.slice(0, 5);
-
-        while (string.length < length) {
-            string += " ";
-        }
-
-        return string;
+        if (string.length >= length) return string.slice(0, length);
+        return string + " ".repeat(length - string.length);
     }
 
     public static getLineAndChar(
