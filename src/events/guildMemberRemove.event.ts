@@ -33,9 +33,7 @@ export default class InteractionCreate extends Event<"guildMemberRemove"> {
         await channel
             .send({ embeds: [embed] })
             .catch((ignored) =>
-                console.log(
-                    "Something went wrong while sending the welcome message"
-                )
+                this.client.logger.error("Something went wrong while sending the leave message")
             );
     }
 }
