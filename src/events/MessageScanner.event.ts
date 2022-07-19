@@ -93,6 +93,14 @@ export default class ReadyEvent extends Event<"messageCreate"> {
         text = text.replace(/\`/g, "'");
         text = text.replace(/\‘/g, "'");
 
+        // Check if it contains sensitive content
+        const sensitive = containsSensitiveInformation(text);
+        if (sensitive) {
+            msg.deletable && (await msg.delete());
+            msg.channel.send({ embeds: [sensitive] });
+            return;
+        }
+
         // Run both debug link checks and regular checks
         const TextAutoResponse = new AutoResponseManager(text);
         await TextAutoResponse.run();
@@ -243,4 +251,34 @@ const RegexParser = (input: string): RegExp => {
 
     // Create the regular expression
     return new RegExp(m[2], m[3]);
+};
+
+/**
+ * Check if the message contains sensitive information and return an embed if so
+ * @param text The text to check in
+ */
+const containsSensitiveInformation = (text: string) => {
+    const dbCredentialsKeywords = [
+        "'db'",
+        "'host'",
+        "'password'",
+        "'username'",
+    ];
+
+    if (
+        dbCredentialsKeywords.every((keyword) =>
+            text.toLowerCase().includes(keyword)
+        )
+    ) {
+        const matches = new RegExp("'password' => '(.*?)'").exec(text);
+        if (matches && matches[1] && matches[1].length > 0) {
+            return client.embeds
+                .base()
+                .setDescription(
+                    "Your message has been deleted because it contains your database password. Please remove it and keep it as an empty string (`''`) and then send it again."
+                );
+        }
+    }
+
+    return false;
 };
