@@ -1,6 +1,7 @@
 import { GuildChannel } from "discord.js";
 import Response_Statistic from "../models/statistics/Response.statistic";
 import ResponseChannel_Statistic from "../models/statistics/ResponseChannel.statistics";
+import Statistic_Statistic from "../models/statistics/Statistic.statistic";
 import ThreadCreation_Statistic from "../models/statistics/ThreadCreation.statistic";
 import { AutoResponse, JsonEmbedResponse } from "../types";
 import AutoResponseManager from "./AutoResponseManager";
@@ -71,6 +72,20 @@ export default class {
         });
 
         item.amount++;
+        await item.save();
+    }
+
+    public static async IncreaseStatistic(name: string) {
+        const [item, _created] = await Statistic_Statistic.findOrCreate({
+            where: {
+                name,
+            },
+            defaults: {
+                name,
+            },
+        });
+
+        item.value++;
         await item.save();
     }
 }

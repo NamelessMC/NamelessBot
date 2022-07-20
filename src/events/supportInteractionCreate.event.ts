@@ -96,6 +96,7 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
                         autoResponseManager.result!,
                         interaction.channel as GuildChannel
                     ); // Statistics
+                    StatisticsManager.IncreaseStatistic("AutoResponseCount");
 
                     await interaction.reply({
                         ephemeral: true,
@@ -128,6 +129,7 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
         content: string
     ) {
         StatisticsManager.IncreaseThreadCreate(); // Statistics
+        StatisticsManager.IncreaseStatistic("ThreadCount");
 
         const channel = interaction.channel as TextChannel;
         const thread = await channel.threads.create({

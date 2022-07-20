@@ -1,15 +1,18 @@
 import { CommandInteraction, Interaction } from "discord.js";
 import { Event } from "../handlers/EventHandler";
 import StringSimilarity from "string-similarity";
+import StatisticsManager from "../managers/StatisticsManager";
 
 export default class InteractionCreate extends Event<"interactionCreate"> {
     public event: "interactionCreate" = "interactionCreate";
 
     public run(interaction: Interaction) {
-        if (interaction.isCommand())
+        if (interaction.isCommand()) {
+            StatisticsManager.IncreaseStatistic("CommandCount");
             return this.client.commands.runCommand(
                 interaction as CommandInteraction
             );
+        }
 
         if (
             interaction.isSelectMenu()

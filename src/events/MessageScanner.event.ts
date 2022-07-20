@@ -41,6 +41,8 @@ export default class ReadyEvent extends Event<"messageCreate"> {
             text +=
                 " "
                 + (await Tesseract.recognize(attachment.url, tesseractConfig));
+
+            StatisticsManager.IncreaseStatistic("ImageScannedCount");
         }
 
         // Text attachments
@@ -113,6 +115,8 @@ export default class ReadyEvent extends Event<"messageCreate"> {
                 TextAutoResponse.result!,
                 msg.channel as GuildChannel
             ); // Statistics
+            StatisticsManager.IncreaseStatistic("AutoResponseCount");
+
             await msg.reply({
                 embeds: [textCheckResult],
             });
