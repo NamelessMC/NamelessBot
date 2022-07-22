@@ -74,7 +74,7 @@ export default class extends Command {
                     StringSimilarity.compareTwoStrings(c, parameter) > 0.5
             );
 
-            if (matches.length > 0) {
+            if (matches.length > 1) {
                 const row = new MessageActionRow().addComponents(
                     new MessageSelectMenu()
                         .setCustomId("support-parameter")
@@ -93,6 +93,17 @@ export default class extends Command {
                     content: "That parameter doesn't exist. Did you mean:",
                     components: [row],
                     ephemeral: true,
+                });
+            } else if (matches.length == 1) {
+                const command = JSON.parse(
+                    client.github.getFileFromRepo(
+                        `./commands/support/${matches[0]}.json`
+                    )
+                );
+                if (!command) return;
+
+                return interaction.reply({
+                    embeds: [client.embeds.MakeResponse(command)],
                 });
             } else {
                 interaction.reply({
