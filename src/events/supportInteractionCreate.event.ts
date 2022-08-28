@@ -15,6 +15,7 @@ import { Event } from "../handlers/EventHandler";
 import AutoResponseManager from "../managers/AutoResponseManager";
 import { nanoid } from "nanoid";
 import StatisticsManager from "../managers/StatisticsManager";
+import { ThreadAutoArchiveDuration } from "discord-api-types/v9";
 
 type issue = {
     title: string;
@@ -134,7 +135,7 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
         const channel = interaction.channel as TextChannel;
         const thread = await channel.threads.create({
             name: title,
-            autoArchiveDuration: "MAX",
+            autoArchiveDuration: ThreadAutoArchiveDuration.ThreeDays,
             reason: "Support request created by " + interaction.user.id,
         });
 
