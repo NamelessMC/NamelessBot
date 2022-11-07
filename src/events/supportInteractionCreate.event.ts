@@ -98,6 +98,9 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
                         interaction.channel as GuildChannel
                     ); // Statistics
                     StatisticsManager.IncreaseStatistic("AutoResponseCount");
+                    StatisticsManager.IncreaseStatistic(
+                        "AutoResponsePreThreadCreate"
+                    );
 
                     await interaction.reply({
                         ephemeral: true,

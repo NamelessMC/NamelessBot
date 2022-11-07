@@ -33,7 +33,7 @@ export default class Bot extends Discord.Client<true> {
     public readonly extension: string;
     public readonly devmode: boolean;
 
-    public config: Config;
+    public readonly config: Config;
 
     constructor(options: Discord.ClientOptions, config: Config) {
         super(options);
