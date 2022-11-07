@@ -25,8 +25,8 @@ export default class Bot extends Discord.Client<true> {
     public readonly logger = new Logger();
     public readonly embeds = new Embeds(this);
 
-    public github: GHManager;
-    public sequelize: Sequelize;
+    public readonly github: GHManager;
+    public readonly sequelize: Sequelize;
 
     //      Misc
 
