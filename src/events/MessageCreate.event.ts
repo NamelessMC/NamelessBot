@@ -60,7 +60,7 @@ export default class InteractionCreate extends Event<"messageCreate"> {
         }
 
         const regex =
-            /<?https:\/\/([canary.]?)+discord.com\/channels\/(\d{18})\/(\d{18})\/(\d{18})>?/gm;
+            /<?https:\/\/([canary.]?)+discord.com\/channels\/(\d{18,19})\/(\d{18,19})\/(\d{18,19})>?/gm;
         const matches = regex.exec(msg.content);
         if (!matches) {
             return;
@@ -80,7 +80,7 @@ export default class InteractionCreate extends Event<"messageCreate"> {
         }
 
         // Fetch the channel
-        const channel = await msg.guild.channels.fetch(channelId).catch();
+        const channel = await msg.guild.channels.fetch(channelId).catch(() => undefined);
         if (!channel || !(channel instanceof TextChannel)) {
             return;
         }
