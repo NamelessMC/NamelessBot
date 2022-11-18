@@ -7,6 +7,7 @@ import { join } from 'path';
 export default class ML {
 
     private model!: tf.Sequential;
+    private textModel: use.UniversalSentenceEncoder | undefined
     private categories: number[] = [];
     private trainingData: MLData[] = [];
 
@@ -66,8 +67,10 @@ export default class ML {
 
     private async encodeData(data: MLData[]) {
         const sentences = data.map(value => value.text.toLowerCase());
-        const model = await use.load();
-        const embeddings = await model.embed(sentences);
+        if (!this.textModel) {
+            this.textModel = await use.load();
+        }
+        const embeddings = await this.textModel.embed(sentences);
         return embeddings;
     }
 }
