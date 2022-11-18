@@ -1,5 +1,6 @@
 config.json
-data/
+data/BotConfiguration/
+data/database.sqlite
 node_modules/
 dist/
 .env
