@@ -5,7 +5,7 @@ export default class {
     private content: string;
     public responsesFile = `../../data/${client.config.repositoryName}/autoresponse.js`;
 
-    private ACCURACCY = 0.7;
+    private ACCURACCY = 0.9;
 
     public result: JsonEmbedResponse | undefined;
 

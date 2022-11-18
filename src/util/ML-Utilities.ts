@@ -16,7 +16,7 @@ export default class ML {
     }
 
     public async train() {
-        this.trainingData = JSON.parse(readFileSync(join(__dirname, '../../trainingData.json'), 'utf-8'));
+        this.trainingData = JSON.parse(readFileSync(join(__dirname, '../../data/trainingData.json'), 'utf-8'));
         this.model = tf.sequential();
         const tensor = tf.tensor2d(this.create2dTensor(this.trainingData));
         const encodedData = await this.encodeData(this.trainingData);
@@ -40,7 +40,7 @@ export default class ML {
 
         this.model.compile({
             loss: 'meanSquaredError',
-            optimizer: tf.train.adam(.06)
+            optimizer: tf.train.adam(.06),
         });
 
         // Train the model
