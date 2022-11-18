@@ -1,9 +1,11 @@
 import { client } from "..";
-import { JsonEmbedResponse } from "../types";
+import { AutoResponse, JsonEmbedResponse } from "../types";
 
 export default class {
     private content: string;
     public responsesFile = `../../data/${client.config.repositoryName}/autoresponse.js`;
+
+    private ACCURACCY = 0.7;
 
     public result: JsonEmbedResponse | undefined;
 
@@ -39,6 +41,14 @@ export default class {
             }
 
             return response.response;
+        }
+
+        // Check if ML can help us :)
+        const { category, value } = await client.MachineLearning.predict(this.content);
+        console.log(category, value)
+        if (value >= this.ACCURACCY) {
+            const embed = responses.find((r: AutoResponse) => r.id === category);
+            return embed.response
         }
     }
 

@@ -8,6 +8,7 @@ import { Config } from "../types";
 import GHManager from "../handlers/GHManager";
 import { join } from "path/posix";
 import { Sequelize } from "sequelize";
+import ML from "../util/ML-Utilities";
 
 export default class Bot extends Discord.Client<true> {
     //      Handlers
@@ -32,6 +33,7 @@ export default class Bot extends Discord.Client<true> {
 
     public readonly extension: string;
     public readonly devmode: boolean;
+    public readonly MachineLearning = new ML()
 
     public readonly config: Config;
 
@@ -47,7 +49,7 @@ export default class Bot extends Discord.Client<true> {
             organisationName: this.config.organizationName,
             repositoryName: this.config.repositoryName,
             branch: this.config.branch,
-            location: join(__dirname, "../../data"),
+            location: join(__dirname, "../data"),
         });
         this.sequelize = new Sequelize({
             dialect: "mysql",
@@ -68,5 +70,6 @@ export default class Bot extends Discord.Client<true> {
         await this.github.cloneRepository();
         this.github.updateChecker();
         this.sequelize.sync();
+        await this.MachineLearning.train()
     }
 }

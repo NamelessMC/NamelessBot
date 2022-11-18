@@ -25,6 +25,7 @@ export interface Config {
 }
 
 export interface AutoResponse {
+    id: number;
     keywords: [string[]];
     response: JsonEmbedResponse;
 }
@@ -52,4 +53,9 @@ export interface LanguageInfo {
     total_chars: number;
     translated_chars: number;
     translated_chars_percent: number;
+}
+
+export interface MLData {
+    text: string;
+    category?: number;
 }
