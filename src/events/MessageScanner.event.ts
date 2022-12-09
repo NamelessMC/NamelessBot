@@ -70,7 +70,7 @@ export default class ReadyEvent extends Event<"messageCreate"> {
                     const page = await browser.newPage();
                     await page.setViewport({ width: 1440, height: 1080 });
                     await page.goto(match);
-                    const screenshot = await page.screenshot({ path: 'screenshot.jpeg', type: 'jpeg', quality: 100 });
+                    const screenshot = await page.screenshot({ type: 'jpeg', quality: 100 });
 
                     text += (" " + (await Tesseract.recognize(screenshot, tesseractConfig)));
                 } catch (err: any) {
