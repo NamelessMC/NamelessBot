@@ -1,5 +1,6 @@
 import { GuildChannel, Message } from "discord.js";
 import { Event } from "../handlers/EventHandler";
+import puppeteer from "puppeteer";
 // @ts-ignore
 import Tesseract from "node-tesseract-ocr";
 import fetch from "node-fetch";
@@ -7,7 +8,6 @@ import { client } from "../index";
 import { BinLink } from "../types";
 import AutoResponseManager from "../managers/AutoResponseManager";
 import StatisticsManager from "../managers/StatisticsManager";
-
 const tesseractConfig = {
     lang: "eng",
     oem: 2,
@@ -57,6 +57,28 @@ export default class ReadyEvent extends Event<"messageCreate"> {
 
             const content = checkForFatalLog(rawContent) ?? rawContent;
             text += " " + content;
+        }
+
+        // Links in text
+        const urlExpression = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b[-a-zA-Z0-9()@:%_\+.~#?&//=]*/gi;
+        const matches = msg.content.match(urlExpression);
+        if (matches) {
+            for (const match of matches) {
+                let browser;
+                try {
+                    browser = await puppeteer.launch({ headless: true });
+                    const page = await browser.newPage();
+                    await page.setViewport({ width: 1440, height: 1080 });
+                    await page.goto(match);
+                    const screenshot = await page.screenshot({ path: 'screenshot.jpeg', type: 'jpeg', quality: 100 });
+
+                    text += (" " + (await Tesseract.recognize(screenshot, tesseractConfig)));
+                } catch (err: any) {
+                    console.log(`❌ Browser error: ${err.message}`);
+                } finally {
+                    await browser?.close();
+                }
+            }
         }
 
         // Paste links

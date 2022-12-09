@@ -13,6 +13,7 @@
     "nanoid": "^3.2.0",
     "node-fetch": "2",
     "node-tesseract-ocr": "^2.2.1",
+    "puppeteer": "^19.4.0",
     "sequelize": "^6.19.0",
     "sqlite3": "^5.0.5",
     "string-similarity": "^4.0.4"
