@@ -45,7 +45,7 @@ export default class InteractionCreate extends Event<"messageCreate"> {
             await msg.channel.send(
                 `Hey ${
                     msg.member?.nickname ?? msg.author.username
-                }! Please don't tag support members directly. This is the ${getNumberWithOrdinal(
+                }! Please don't tag staff members directly. This is the ${getNumberWithOrdinal(
                     pingInfo.count
                 )} time!`
             );
