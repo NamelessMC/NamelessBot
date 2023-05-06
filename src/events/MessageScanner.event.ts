@@ -38,9 +38,21 @@ export default class ReadyEvent extends Event<"messageCreate"> {
                 continue;
             }
 
+            // Verify if the bot can actually request the content
+            const isInvalidRequest = await fetch(attachment.url)
+                .then((res) => res.text())
+                .then((res) => res.includes("<!DOCTYPE html>"));
+            if (isInvalidRequest) {
+                this.logger.warn("Unable to request image " + attachment.url);
+                continue;
+            }
+
             text +=
                 " "
-                + (await Tesseract.recognize(attachment.url, tesseractConfig));
+                + (await Tesseract.recognize(
+                    attachment.url,
+                    tesseractConfig
+                ).catch(() => ""));
 
             StatisticsManager.IncreaseStatistic("ImageScannedCount");
         }
