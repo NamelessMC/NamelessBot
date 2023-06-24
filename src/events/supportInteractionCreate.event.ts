@@ -10,16 +10,21 @@ import {
     ModalSubmitInteraction,
     ButtonInteraction,
     GuildChannel,
+    MessageActionRowComponent,
+    GuildMemberRoleManager,
+    GuildMember,
 } from "discord.js";
 import { Event } from "../handlers/EventHandler";
 import AutoResponseManager from "../managers/AutoResponseManager";
 import { nanoid } from "nanoid";
 import StatisticsManager from "../managers/StatisticsManager";
 import { ThreadAutoArchiveDuration } from "discord-api-types/v9";
+import Thread from "../models/Thread.js";
 
 type issue = {
     title: string;
     content: string;
+    debug_link: string;
 };
 
 const buttonToContentMap = new Collection<string, issue>();
@@ -49,6 +54,12 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
                 descriptionInput.setRequired(true);
                 descriptionInput.setMinLength(10);
 
+                const debugLinkInput = new TextInputComponent();
+                debugLinkInput.setCustomId("debug-link");
+                debugLinkInput.setLabel("Debug link (if applicable)");
+                debugLinkInput.setStyle("SHORT");
+                debugLinkInput.setRequired(false);
+
                 const firstActionRow =
                     new MessageActionRow<ModalActionRowComponent>().addComponents(
                         titleInput
@@ -57,9 +68,51 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
                     new MessageActionRow<ModalActionRowComponent>().addComponents(
                         descriptionInput
                     );
+                const thirdActionRow =
+                    new MessageActionRow<ModalActionRowComponent>().addComponents(
+                        debugLinkInput
+                    );
 
-                modal.addComponents(firstActionRow, secondActionRow);
+                modal.addComponents(
+                    firstActionRow,
+                    secondActionRow,
+                    thirdActionRow
+                );
                 await interaction.showModal(modal);
+            }
+
+            if (buttonId === "debug-link") {
+                if (
+                    !interaction.channel
+                    || !interaction.member
+                    || !(
+                        interaction.member.roles
+                        instanceof GuildMemberRoleManager
+                    )
+                )
+                    return;
+                if (
+                    !(
+                        interaction.member.roles as GuildMemberRoleManager
+                    ).cache.some((role) =>
+                        this.client.config.supportRoles.includes(role.id)
+                    )
+                ) {
+                    interaction.reply("You cannot do this!");
+                    return;
+                }
+                const threadId = interaction.channel.id;
+                const messageId = interaction.message.id;
+
+                const data = await Thread.findOne({
+                    where: { messageId: messageId, threadId: threadId },
+                });
+                if (data) {
+                    interaction.reply({
+                        ephemeral: true,
+                        content: data.debugLink,
+                    });
+                }
             }
         }
 
@@ -70,6 +123,8 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
                 const description = interaction.fields.getTextInputValue(
                     "support-description"
                 );
+                const debug_link =
+                    interaction.fields.getTextInputValue("debug-link");
 
                 // Check if we have an automatic response for their issue
                 const autoResponseManager = new AutoResponseManager(
@@ -91,6 +146,7 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
                     buttonToContentMap.set(buttonId, {
                         title,
                         content: description,
+                        debug_link: debug_link,
                     });
 
                     StatisticsManager.SaveResponse(
@@ -112,7 +168,7 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
                     return;
                 }
 
-                this.CreateThread(interaction, title, description);
+                this.CreateThread(interaction, title, description, debug_link);
             }
         }
 
@@ -120,18 +176,20 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
             interaction.isButton()
             && buttonToContentMap.has(interaction.customId)
         ) {
-            const { title, content } = buttonToContentMap.get(
+            const { title, content, debug_link } = buttonToContentMap.get(
                 interaction.customId
             )!;
-            this.CreateThread(interaction, title, content);
+            this.CreateThread(interaction, title, content, debug_link);
             buttonToContentMap.delete(interaction.customId);
         }
     }
     private async CreateThread(
         interaction: ModalSubmitInteraction | ButtonInteraction,
         title: string,
-        content: string
+        content: string,
+        debug_link: string
     ) {
+        await interaction.deferReply({ ephemeral: true });
         StatisticsManager.IncreaseThreadCreate(); // Statistics
         StatisticsManager.IncreaseStatistic("ThreadCount");
 
@@ -144,21 +202,42 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
 
         // Add user to thread
         await thread.members.add(interaction.user);
-        const embed = this.client.embeds.base();
-        embed.setDescription(content);
-
         await thread.send(`<@&${this.client.config.supportMentionRoleId}>`);
 
         let sentMsg = await thread.send(content);
         sentMsg.author = interaction.user;
         sentMsg.content = title + "\n\n" + sentMsg.content;
-        this.client.emit("messageCreate", sentMsg); // Emit messageCreate event to run debug link checks
 
-        interaction.reply({
+        // Only if debug link
+        if (debug_link && debug_link.length > 0) {
+            const embed = this.client.embeds.base();
+            embed.setFooter(null);
+            embed.setDescription("A debug link was supplied with this thread");
+            const btn = new MessageButton();
+            btn.setCustomId("debug-link");
+            btn.setLabel("View debug link");
+            btn.setStyle("PRIMARY");
+
+            const row = new MessageActionRow<MessageActionRowComponent>();
+            row.addComponents(btn);
+            const msg = await thread.send({
+                embeds: [embed],
+                components: [row],
+            });
+            await msg.pin();
+
+            await Thread.create({
+                threadId: thread.id,
+                debugLink: debug_link,
+                messageId: msg.id,
+            });
+        }
+
+        this.client.emit("messageCreate", sentMsg); // Emit messageCreate event to run debug link checks
+        interaction.editReply({
             content:
                 "Your support request has been created! View your thread here: "
                 + thread.toString(),
-            ephemeral: true,
         });
     }
 }

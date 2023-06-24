@@ -22,11 +22,19 @@ export default class InteractionCreate extends Event<"messageCreate"> {
             msg.delete();
         }
 
-        // quick embed shit
+        if (
+            msg.channel.isThread()
+            && msg.channel.parentId === this.client.config.supportChannelId
+            && msg.type === "CHANNEL_PINNED_MESSAGE"
+        ) {
+            msg.delete();
+        }
+
         if (
             msg.content.toLowerCase().startsWith("!embed")
             && msg.member?.permissions.has("MANAGE_MESSAGES")
         ) {
+            // quick embed shit
             const embed = this.client.embeds.base();
             embed.setDescription(
                 this.client.config.supportEmbedDescription.join("\n")
@@ -80,7 +88,9 @@ export default class InteractionCreate extends Event<"messageCreate"> {
         }
 
         // Fetch the channel
-        const channel = await msg.guild.channels.fetch(channelId).catch(() => undefined);
+        const channel = await msg.guild.channels
+            .fetch(channelId)
+            .catch(() => undefined);
         if (!channel || !(channel instanceof TextChannel)) {
             return;
         }
