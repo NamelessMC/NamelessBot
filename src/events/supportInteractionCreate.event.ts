@@ -56,7 +56,9 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
 
                 const debugLinkInput = new TextInputComponent();
                 debugLinkInput.setCustomId("debug-link");
-                debugLinkInput.setLabel("Debug link (if applicable)");
+                debugLinkInput.setLabel(
+                    "Debug link (Configuration -> Maintenance)"
+                );
                 debugLinkInput.setStyle("SHORT");
                 debugLinkInput.setRequired(false);
 
