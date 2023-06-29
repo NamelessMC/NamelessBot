@@ -100,7 +100,10 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
                         this.client.config.supportRoles.includes(role.id)
                     )
                 ) {
-                    interaction.reply("You cannot do this!");
+                    interaction.reply({
+                        content: "You cannot do this!",
+                        ephemeral: true,
+                    });
                     return;
                 }
                 const threadId = interaction.channel.id;
