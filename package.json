@@ -14,8 +14,7 @@
     "node-fetch": "2",
     "node-tesseract-ocr": "^2.2.1",
     "sequelize": "^6.19.0",
-    "sqlite3": "^5.0.5",
-    "string-similarity": "^4.0.4"
+    "sqlite3": "^5.0.5"
   },
   "scripts": {
     "start": "node dist",
