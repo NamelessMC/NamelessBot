@@ -7,7 +7,7 @@ import {
     MessageSelectMenu,
 } from "discord.js";
 import Bot from "../managers/Bot";
-import StringSimilarity from "../util/StringSimilarity";
+import StringSimilarity from "string-similarity-js";
 
 export default class extends Command {
     public name = "docs";

@@ -1,6 +1,6 @@
 import { CommandInteraction, Interaction } from "discord.js";
 import { Event } from "../handlers/EventHandler";
-import StringSimilarity from "../util/StringSimilarity";
+import StringSimilarity from "string-similarity-js";
 import StatisticsManager from "../managers/StatisticsManager";
 
 export default class InteractionCreate extends Event<"interactionCreate"> {
