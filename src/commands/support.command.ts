@@ -7,7 +7,7 @@ import {
     MessageSelectMenu,
 } from "discord.js";
 import Bot from "../managers/Bot";
-import StringSimilarity from "string-similarity";
+import StringSimilarity from "string-similarity-js";
 
 export default class extends Command {
     public name = "support";
@@ -71,7 +71,7 @@ export default class extends Command {
         } catch {
             const matches = commandInfo.parameters.filter(
                 (c: string) =>
-                    StringSimilarity.compareTwoStrings(c, parameter) > 0.5
+                    StringSimilarity(c, parameter) > 0.5
             );
 
             if (matches.length > 1) {
