@@ -1,6 +1,6 @@
 import { CommandInteraction, Interaction } from "discord.js";
 import { Event } from "../handlers/EventHandler";
-import StringSimilarity from "string-similarity";
+import StringSimilarity from "string-similarity-js";
 import StatisticsManager from "../managers/StatisticsManager";
 
 export default class InteractionCreate extends Event<"interactionCreate"> {
@@ -58,7 +58,7 @@ export default class InteractionCreate extends Event<"interactionCreate"> {
 
             const matches = commandInfo.parameters.filter(
                 (c: string) =>
-                    StringSimilarity.compareTwoStrings(c, parameter) > 0.5
+                    StringSimilarity(c, parameter) > 0.5
             );
 
             if (matches.length > 0) {
