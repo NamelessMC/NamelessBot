@@ -41,7 +41,7 @@ export interface BinLink {
 }
 
 export interface LanguageInfo {
-    language: string;
+    name: string;
     code: string;
     total: number;
     translated: number;
